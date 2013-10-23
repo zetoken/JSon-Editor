@@ -61,6 +61,8 @@
     <Compile Include="JsonEditorMainForm.Designer.cs">
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Linq\ForEachExtension.cs" />
+    <Compile Include="Linq\JPropertyEqualityComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="JsonEditorMainForm.resx">

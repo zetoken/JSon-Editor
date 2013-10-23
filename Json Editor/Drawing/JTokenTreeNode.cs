@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor.Drawing
 {
@@ -73,12 +74,50 @@ namespace ZTn.Json.Editor.Drawing
                 JTokenTag.Replace(jsonEditorSource.RootJToken);
             }
 
-            return UpdateTreeNodes(jsonEditorSource.RootTreeNode);
+            return UpdateParentTreeNode(jsonEditorSource.RootTreeNode);
         }
 
         #endregion
 
-        protected TreeNode UpdateTreeNodes(TreeNode newNode)
+        /// <summary>
+        /// Remove JTokenTag from its parent if <paramref name="jsonString"/> is empty or null.
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <returns><value>true</value> if <paramref name="jsonString"/> is empty or null.</returns>
+        protected bool CheckEmptyJsonString(string jsonString)
+        {
+            if (String.IsNullOrWhiteSpace(jsonString))
+            {
+                JTokenTag.Remove();
+                CleanParentTreeNode();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Remove <see cref="JTokenTreeNode"/>s from the parent of current <see cref="TreeNode"/> having a detached JTokenTag property.
+        /// </summary>
+        /// <returns>First available <see cref="TreeNode"/> or null if the parent has no children.</returns>
+        protected TreeNode CleanParentTreeNode()
+        {
+            TreeNode parent = Parent;
+
+            parent.Nodes
+                 .OfType<JTokenTreeNode>()
+                 .Where(n => n != null && n.JTokenTag.Parent == null)
+                 .ToList()  // Mandatory because working list will be modified next step
+                 .ForEach(n => parent.Nodes.Remove(n));
+
+            return parent.Nodes.Cast<TreeNode>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Insert or replace a <paramref name="TreeNode"/> in current parent nodes.
+        /// </summary>
+        /// <param name="newNode"></param>
+        /// <returns></returns>
+        protected TreeNode UpdateParentTreeNode(TreeNode newNode)
         {
             if (newNode != this)
             {
@@ -89,12 +128,13 @@ namespace ZTn.Json.Editor.Drawing
                 }
                 else
                 {
-                    treeNodeCollection = JsonEditorMainForm.JsonEditorForm.jsonTreeView.Nodes;
+                    treeNodeCollection = TreeView.Nodes;
                 }
                 int nodeIndex = treeNodeCollection.IndexOf(this);
 
                 treeNodeCollection.Insert(nodeIndex, newNode);
-                treeNodeCollection.Remove(this);
+
+                CleanParentTreeNode();
             }
 
             if (IsExpanded)

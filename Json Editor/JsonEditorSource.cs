@@ -14,7 +14,7 @@ namespace ZTn.Json.Editor
     sealed class JsonEditorSource
     {
         private JToken jTokenRoot;
-        private TreeNode treeNodeRoot;
+        private JTokenTreeNode treeNodeRoot;
 
         #region >> Properties
 
@@ -111,7 +111,7 @@ namespace ZTn.Json.Editor
             }
         }
 
-        public TreeNode RootTreeNode
+        public JTokenTreeNode RootTreeNode
         {
             get
             {

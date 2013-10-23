@@ -235,7 +235,6 @@ namespace ZTn.Json.Editor
         private void jsonValueTextBox_Enter(object sender, EventArgs e)
         {
             jsonValueTextBox.TextChanged += JsonValueTextBox_TextChanged;
-
         }
     }
 }
