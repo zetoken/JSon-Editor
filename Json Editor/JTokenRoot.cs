@@ -11,28 +11,23 @@ using ZTn.Json.Editor.Drawing;
 
 namespace ZTn.Json.Editor
 {
-    sealed class JsonEditorSource
+    sealed class JTokenRoot
     {
-        private JToken jTokenRoot;
-        private JTokenTreeNode treeNodeRoot;
+        #region >> Fields
+
+        private JToken jTokenValue;
+
+        #endregion
 
         #region >> Properties
 
         /// <summary>
-        /// Raw Json text.
+        /// Root <see cref="JToken"/> node.
         /// </summary>
-        public string Text
+        public JToken JTokenValue
         {
-            get { return jTokenRoot.ToString(); }
-        }
-
-        /// <summary>
-        /// Root <see cref="JToken"/> node
-        /// </summary>
-        public JToken RootJToken
-        {
-            get { return jTokenRoot; }
-            set { jTokenRoot = value; }
+            get { return jTokenValue; }
+            set { jTokenValue = value; }
         }
 
         #endregion
@@ -40,19 +35,10 @@ namespace ZTn.Json.Editor
         #region >> Constructors
 
         /// <summary>
-        /// Default constructor
-        /// </summary>
-        public JsonEditorSource()
-        {
-            jTokenRoot = JToken.Parse("{}");
-        }
-
-        /// <summary>
         /// Constructor using an existing stream to populate the instance.
         /// </summary>
         /// <param name="jsonStream">Source stream.</param>
-        public JsonEditorSource(Stream jsonStream)
-            : this()
+        public JTokenRoot(Stream jsonStream)
         {
             Load(jsonStream);
         }
@@ -61,8 +47,7 @@ namespace ZTn.Json.Editor
         /// Constructor using an existing json string to populate the instance.
         /// </summary>
         /// <param name="jsonString">Source string.</param>
-        public JsonEditorSource(string jsonString)
-            : this()
+        public JTokenRoot(string jsonString)
         {
             Load(jsonString);
         }
@@ -71,19 +56,17 @@ namespace ZTn.Json.Editor
         /// Constructor using an existing json string to populate the instance.
         /// </summary>
         /// <param name="jsonString">Source string.</param>
-        public JsonEditorSource(JToken jToken)
-            : this()
+        public JTokenRoot(JToken jToken)
         {
             Load(jToken);
         }
 
         #endregion
 
-        public string BeautifyJsonText()
-        {
-            return jTokenRoot.ToString();
-        }
-
+        /// <summary>
+        /// Initialize using an existing stream to populate the instance.
+        /// </summary>
+        /// <param name="jsonStream">Source stream.</param>
         public void Load(Stream jsonStream)
         {
             using (var streamReader = new StreamReader(jsonStream))
@@ -92,30 +75,33 @@ namespace ZTn.Json.Editor
             }
         }
 
+        /// <summary>
+        /// Initialize using an existing json string to populate the instance.
+        /// </summary>
+        /// <param name="jsonString">Source string.</param>
         public void Load(string jsonString)
         {
             Load(JToken.Parse(jsonString));
         }
 
+        /// <summary>
+        /// Initialize using an existing json string to populate the instance.
+        /// </summary>
+        /// <param name="jsonString">Source string.</param>
         public void Load(JToken jToken)
         {
-            jTokenRoot = jToken;
-            treeNodeRoot = JsonTreeNodeBuilder.JsonVisitor((dynamic)jTokenRoot);
+            jTokenValue = jToken;
         }
 
+        /// <summary>
+        /// Save the enclosed <see cref="JToken"/> in an existing stream.
+        /// </summary>
+        /// <param name="jsonStream">Target stream.</param>
         public void Save(Stream jsonStream)
         {
             using (var streamWriter = new StreamWriter(jsonStream))
             {
-                streamWriter.Write(jTokenRoot.ToString());
-            }
-        }
-
-        public JTokenTreeNode RootTreeNode
-        {
-            get
-            {
-                return treeNodeRoot;
+                streamWriter.Write(jTokenValue.ToString());
             }
         }
     }

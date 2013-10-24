@@ -54,7 +54,8 @@
     <Compile Include="Drawing\JObjectTreeNode.cs" />
     <Compile Include="Drawing\JPropertyTreeNode.cs" />
     <Compile Include="Drawing\JTokenTreeNode.cs" />
-    <Compile Include="JsonEditorSource.cs" />
+    <Compile Include="Drawing\UnattendedJTokenTypeException.cs" />
+    <Compile Include="JTokenRoot.cs" />
     <Compile Include="JsonEditorMainForm.cs">
       <SubType>Form</SubType>
     </Compile>

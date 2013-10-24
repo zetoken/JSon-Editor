@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Drawing;
+using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor
 {
@@ -17,19 +18,15 @@ namespace ZTn.Json.Editor
     {
         #region >> Fields
 
-        JsonEditorSource jsonEditorItem;
+        JTokenRoot jsonEditorItem;
 
         #endregion
-
-        public static JsonEditorMainForm JsonEditorForm { get; private set; }
 
         #region >> Constructor
 
         public JsonEditorMainForm()
         {
             InitializeComponent();
-
-            JsonEditorForm = this;
 
             jsonTypeComboBox.DataSource = Enum.GetValues(typeof(JTokenType));
 
@@ -54,20 +51,19 @@ namespace ZTn.Json.Editor
                 {
                     if (stream != null)
                     {
-                        jsonEditorItem = new JsonEditorSource(stream);
+                        jsonEditorItem = new JTokenRoot(stream);
                     }
                     else
                     {
-                        jsonEditorItem = new JsonEditorSource();
+                        jsonEditorItem = new JTokenRoot("{}");
                     }
                 }
 
                 jsonTreeView.Nodes.Clear();
-                jsonTreeView.Nodes.Add(jsonEditorItem.RootTreeNode);
-                foreach (TreeNode node in jsonTreeView.Nodes)
-                {
-                    node.Expand();
-                }
+                jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+                jsonTreeView.Nodes
+                    .Cast<TreeNode>()
+                    .ForEach(n => n.Expand());
 
                 jsonTreeTabPage.Text = openFileDialog.FileName;
             }
@@ -88,7 +84,7 @@ namespace ZTn.Json.Editor
                 {
                     if (stream != null)
                     {
-                        new JsonEditorSource(((JTokenTreeNode)jsonTreeView.TopNode).JTokenTag).Save(stream);
+                        new JTokenRoot(((JTokenTreeNode)jsonTreeView.TopNode).JTokenTag).Save(stream);
                     }
                 }
             }
@@ -96,26 +92,24 @@ namespace ZTn.Json.Editor
 
         private void newJsonObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jsonEditorItem = new JsonEditorSource("{}");
+            jsonEditorItem = new JTokenRoot("{}");
 
             jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(jsonEditorItem.RootTreeNode);
-            foreach (TreeNode node in jsonTreeView.Nodes)
-            {
-                node.Expand();
-            }
+            jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes
+                .Cast<TreeNode>()
+                .ForEach(n => n.Expand());
         }
 
         private void newJsonArrayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jsonEditorItem = new JsonEditorSource("[]");
+            jsonEditorItem = new JTokenRoot("[]");
 
             jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(jsonEditorItem.RootTreeNode);
-            foreach (TreeNode node in jsonTreeView.Nodes)
-            {
-                node.Expand();
-            }
+            jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes
+                .Cast<TreeNode>()
+                .ForEach(n => n.Expand());
         }
 
         #region >> JsonTreeView_NodeMouseClick
@@ -131,45 +125,23 @@ namespace ZTn.Json.Editor
             JsonTreeView_NodeMouseClick((dynamic)e.Node, e);
         }
 
+        /// <summary>
+        /// Default catcher in case of a node of unattended type.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="e"></param>
         private void JsonTreeView_NodeMouseClick(TreeNode node, TreeNodeMouseClickEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = "";
 
-            jsonTypeComboBox.Text = "";
+            jsonTypeComboBox.Text = JTokenType.Undefined.ToString();
 
             jsonValueTextBox.ReadOnly = true;
         }
 
-        private void JsonTreeView_NodeMouseClick(JArrayTreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = "JArray";
-
-            jsonTypeComboBox.Text = node.jArrayTag.Type.ToString();
-
-            jsonValueTextBox.Text = node.jArrayTag.ToString();
-        }
-
-        private void JsonTreeView_NodeMouseClick(JObjectTreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = "JObject";
-
-            jsonTypeComboBox.Text = node.JObjectTag.Type.ToString();
-
-            jsonValueTextBox.Text = node.JObjectTag.ToString();
-        }
-
-        private void JsonTreeView_NodeMouseClick(JPropertyTreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = "JProperty";
-
-            jsonTypeComboBox.Text = node.JPropertyTag.Type.ToString();
-
-            jsonValueTextBox.Text = node.JPropertyTag.ToString();
-        }
-
         private void JsonTreeView_NodeMouseClick(JTokenTreeNode node, TreeNodeMouseClickEventArgs e)
         {
-            newtonsoftJsonTypeTextBox.Text = "JToken";
+            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
             jsonTypeComboBox.Text = node.JTokenTag.Type.ToString();
 
@@ -178,7 +150,7 @@ namespace ZTn.Json.Editor
 
         private void JsonTreeView_NodeMouseClick(JValueTreeNode node, TreeNodeMouseClickEventArgs e)
         {
-            newtonsoftJsonTypeTextBox.Text = "JValue";
+            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
             jsonTypeComboBox.Text = node.jValueTag.Type.ToString();
 
@@ -200,7 +172,7 @@ namespace ZTn.Json.Editor
             IJsonTreeNode node = e.Node as IJsonTreeNode;
             if (node != null)
             {
-                node.UpdateWhenCollapsing();
+                node.AfterCollapse();
             }
         }
 
@@ -209,21 +181,18 @@ namespace ZTn.Json.Editor
             IJsonTreeNode node = e.Node as IJsonTreeNode;
             if (node != null)
             {
-                node.UpdateWhenExpanding();
+                node.AfterExpand();
             }
         }
 
         private void JsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!jsonValueTextBox.ReadOnly)
+            IJsonTreeNode node = jsonTreeView.SelectedNode as IJsonTreeNode;
+            if (node != null)
             {
-                IJsonTreeNode node = jsonTreeView.SelectedNode as IJsonTreeNode;
-                if (node != null)
-                {
-                    jsonTreeView.SuspendLayout();
-                    jsonTreeView.SelectedNode = node.UpdateWhenEditing(jsonValueTextBox.Text);
-                    jsonTreeView.ResumeLayout();
-                }
+                jsonTreeView.BeginUpdate();
+                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+                jsonTreeView.EndUpdate();
             }
         }
 

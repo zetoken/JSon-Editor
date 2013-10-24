@@ -43,13 +43,13 @@ namespace ZTn.Json.Editor.Drawing
         #region >> JTokenTreeNode
 
         /// <inheritdoc />
-        public override void UpdateWhenCollapsing()
+        public override void AfterCollapse()
         {
             Text = "{" + JObjectTag.Type + "} " + JObjectTag;
         }
 
         /// <inheritdoc />
-        public override void UpdateWhenExpanding()
+        public override void AfterExpand()
         {
             Text = "{" + JObjectTag.Type + "}";
         }

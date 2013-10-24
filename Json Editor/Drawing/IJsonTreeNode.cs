@@ -7,16 +7,16 @@ namespace ZTn.Json.Editor.Drawing
         /// <summary>
         /// To be called whenever the node is collapsing
         /// </summary>
-        void UpdateWhenCollapsing();
+        void AfterCollapse();
 
         /// <summary>
         /// To be called whenever the node is expanding
         /// </summary>
-        void UpdateWhenExpanding();
+        void AfterExpand();
 
         /// <summary>
         /// To be called whenever the value of the json text is changed
         /// </summary>
-        TreeNode UpdateWhenEditing(string newJson);
+        TreeNode AfterJsonTextChange(string newJson);
     }
 }

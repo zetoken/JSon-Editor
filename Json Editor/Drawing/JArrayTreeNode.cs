@@ -28,7 +28,7 @@ namespace ZTn.Json.Editor.Drawing
             : base(jArray)
         {
             Tag = jArray;
-            UpdateWhenCollapsing();
+            AfterCollapse();
         }
 
         public JArrayTreeNode(JArray jArray, Action<JArrayTreeNode> callBack)
@@ -45,13 +45,13 @@ namespace ZTn.Json.Editor.Drawing
         #region >> JTokenTreeNode
 
         /// <inheritdoc />
-        public override void UpdateWhenCollapsing()
+        public override void AfterCollapse()
         {
             Text = "[" + jArrayTag.Type + "] " + Tag;
         }
 
         /// <inheritdoc />
-        public override void UpdateWhenExpanding()
+        public override void AfterExpand()
         {
             Text = "[" + jArrayTag.Type + "]";
         }

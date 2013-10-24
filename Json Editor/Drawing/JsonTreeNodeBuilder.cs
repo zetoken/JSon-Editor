@@ -10,27 +10,29 @@ namespace ZTn.Json.Editor.Drawing
 {
     sealed class JsonTreeNodeBuilder
     {
+        #region >> Create
+
         /// <summary>
-        /// Visitor allowing dynamic dispatch to specialized overloads.
+        /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance by dynamically dispatching to specialized overloads.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static TreeNode JsonVisitor(dynamic obj)
+        public static TreeNode Create(dynamic obj)
         {
-            return JsonVisitor(obj);
+            return Create(obj);
         }
 
         /// <summary>
-        /// Visit a JSON array.
+        /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JArray"/> instance.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static TreeNode JsonVisitor(JArray obj)
+        public static TreeNode Create(JArray obj)
         {
             var node = new Drawing.JArrayTreeNode(obj);
 
             node.Nodes.AddRange(obj
-                .Select(o => JsonVisitor((dynamic)o))
+                .Select(o => Create((dynamic)o))
                 .Cast<TreeNode>()
                 .ToArray()
                 );
@@ -39,16 +41,16 @@ namespace ZTn.Json.Editor.Drawing
         }
 
         /// <summary>
-        /// Visit a JSON object.
+        /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JObject"/> instance.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static TreeNode JsonVisitor(JObject obj)
+        public static TreeNode Create(JObject obj)
         {
             var node = new Drawing.JObjectTreeNode(obj);
 
             node.Nodes.AddRange(obj.Properties()
-                .Select(o => JsonVisitor(o))
+                .Select(o => Create(o))
                 .ToArray()
                 );
 
@@ -56,16 +58,16 @@ namespace ZTn.Json.Editor.Drawing
         }
 
         /// <summary>
-        /// Visit a JSON property.
+        /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JProperty"/> instance.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static TreeNode JsonVisitor(JProperty obj)
+        public static TreeNode Create(JProperty obj)
         {
             var node = new Drawing.JPropertyTreeNode(obj);
 
             node.Nodes.AddRange(obj
-                .Select(o => JsonVisitor((dynamic)o))
+                .Select(o => Create((dynamic)o))
                 .Cast<TreeNode>()
                 .ToArray()
                 );
@@ -74,28 +76,100 @@ namespace ZTn.Json.Editor.Drawing
         }
 
         /// <summary>
-        /// Visit an abstract JSON token.
+        /// Throw a <see cref="UnattendedJTokenTypeException"/> for the <paramref name="obj"/> instance beeing a <see cref="JToken"/> instance.
         /// This method exists only for safety in case of a new concrete <see cref="JToken"/> instance is implemented in the future.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static TreeNode JsonVisitor(JToken obj)
+        /// <exception cref="UnattendedJTokenTypeException">Always thrown.</exception>
+        private static TreeNode Create(JToken obj)
         {
-            var node = new Drawing.JTokenTreeNode(obj);
-
-            return node;
+            throw new UnattendedJTokenTypeException(obj);
         }
 
         /// <summary>
-        /// Visit a JSON value.
+        /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JValue"/> instance.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static TreeNode JsonVisitor(JValue obj)
+        public static TreeNode Create(JValue obj)
         {
             var node = new Drawing.JValueTreeNode(obj);
 
             return node;
         }
+
+        #endregion
+
+        #region >> Wrap
+
+        /// <summary>
+        /// Create a TreeNode for the <paramref name="obj"/> instance by dynamically dispatching to specialized overloads.
+        /// No subtree is created.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TreeNode Wrap(dynamic obj)
+        {
+            return Wrap(obj);
+        }
+
+        /// <summary>
+        /// Create a TreeNode for the <paramref name="obj"/> instance beeing a <see cref="JArray"/> instance.
+        /// No subtree is created.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TreeNode Wrap(JArray obj)
+        {
+            return new JArrayTreeNode(obj);
+        }
+
+        /// <summary>
+        /// Create a TreeNode for the <paramref name="obj"/> instance beeing a <see cref="JObject"/> instance.
+        /// No subtree is created.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TreeNode Wrap(JObject obj)
+        {
+            return new JObjectTreeNode(obj);
+        }
+
+        /// <summary>
+        /// Create a TreeNode for the <paramref name="obj"/> instance beeing a <see cref="JProperty"/> instance.
+        /// No subtree is created.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TreeNode Wrap(JProperty obj)
+        {
+            return new JPropertyTreeNode(obj);
+        }
+
+        /// <summary>
+        /// Throw a <see cref="UnattendedJTokenTypeException"/> for the <paramref name="obj"/> instance beeing a <see cref="JToken"/> instance.
+        /// This method exists only for safety in case of a new concrete <see cref="JToken"/> instance is implemented in the future.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="UnattendedJTokenTypeException">Always thrown.</exception>
+        private static TreeNode Wrap(JToken obj)
+        {
+            throw new UnattendedJTokenTypeException(obj);
+        }
+
+        /// <summary>
+        /// Create a TreeNode for the <paramref name="obj"/> instance beeing a <see cref="JValue"/> instance.
+        /// No subtree is created.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TreeNode Wrap(JValue obj)
+        {
+            return new JValueTreeNode(obj);
+        }
+
+        #endregion
     }
 }

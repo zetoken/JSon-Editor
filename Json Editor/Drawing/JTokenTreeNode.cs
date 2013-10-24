@@ -12,7 +12,7 @@ namespace ZTn.Json.Editor.Drawing
     /// <summary>
     /// Specialized <see cref="TreeNode"/> for handling <see cref="JToken"/> representation in a <see cref="TreeView"/>.
     /// </summary>
-    class JTokenTreeNode : TreeNode, IJsonTreeNode
+    abstract class JTokenTreeNode : TreeNode, IJsonTreeNode
     {
         #region >> Properties
 
@@ -28,7 +28,7 @@ namespace ZTn.Json.Editor.Drawing
         public JTokenTreeNode(JToken jToken)
         {
             Tag = jToken;
-            UpdateWhenCollapsing();
+            AfterCollapse();
         }
 
         public JTokenTreeNode(JToken jToken, Action<JTokenTreeNode> callBack)
@@ -45,24 +45,27 @@ namespace ZTn.Json.Editor.Drawing
         #region >> IJsonTreeNode
 
         /// <inheritdoc />
-        public virtual void UpdateWhenCollapsing()
+        /// <remarks>Default simple implementation to be overriden if needed.</remarks>
+        public virtual void AfterCollapse()
         {
             Text = Tag.ToString();
         }
 
         /// <inheritdoc />
-        public virtual void UpdateWhenExpanding()
+        /// <remarks>Default simple implementation to be overriden if needed.</remarks>
+        public virtual void AfterExpand()
         {
             Text = Tag.ToString();
         }
 
         /// <inheritdoc />
-        public virtual TreeNode UpdateWhenEditing(string jsonString)
+        /// <remarks>Default simple implementation to be overriden if needed.</remarks>
+        public virtual TreeNode AfterJsonTextChange(string jsonString)
         {
-            JsonEditorSource jsonEditorSource;
+            JTokenRoot jTokenRoot;
             try
             {
-                jsonEditorSource = new JsonEditorSource(jsonString);
+                jTokenRoot = new JTokenRoot(jsonString);
             }
             catch
             {
@@ -71,10 +74,10 @@ namespace ZTn.Json.Editor.Drawing
 
             if (JTokenTag.Parent != null)
             {
-                JTokenTag.Replace(jsonEditorSource.RootJToken);
+                JTokenTag.Replace(jTokenRoot.JTokenValue);
             }
 
-            return UpdateParentTreeNode(jsonEditorSource.RootTreeNode);
+            return UpdateParentTreeNode(JsonTreeNodeBuilder.Create(jTokenRoot.JTokenValue));
         }
 
         #endregion
@@ -103,13 +106,16 @@ namespace ZTn.Json.Editor.Drawing
         {
             TreeNode parent = Parent;
 
+            // ToList() is mandatory before ForEach because working list will be modified
             parent.Nodes
-                 .OfType<JTokenTreeNode>()
-                 .Where(n => n != null && n.JTokenTag.Parent == null)
-                 .ToList()  // Mandatory because working list will be modified next step
-                 .ForEach(n => parent.Nodes.Remove(n));
+                .OfType<JTokenTreeNode>()
+                .Where(n => n != null && n.JTokenTag.Parent == null)
+                .ToList()
+                .ForEach(n => parent.Nodes.Remove(n));
 
-            return parent.Nodes.Cast<TreeNode>().FirstOrDefault();
+            return parent.Nodes
+                .Cast<TreeNode>()
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -135,15 +141,15 @@ namespace ZTn.Json.Editor.Drawing
                 treeNodeCollection.Insert(nodeIndex, newNode);
 
                 CleanParentTreeNode();
-            }
 
-            if (IsExpanded)
-            {
-                newNode.Expand();
-            }
-            else
-            {
-                newNode.Collapse();
+                if (IsExpanded)
+                {
+                    newNode.Expand();
+                }
+                else
+                {
+                    newNode.Collapse();
+                }
             }
 
             return newNode;

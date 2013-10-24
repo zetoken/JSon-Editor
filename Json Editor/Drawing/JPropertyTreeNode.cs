@@ -45,21 +45,27 @@ namespace ZTn.Json.Editor.Drawing
         #region >> JTokenTreeNode
 
         /// <inheritdoc />
-        public override void UpdateWhenCollapsing()
+        public override void AfterCollapse()
         {
             Text = (Tag as JProperty).ToString();
-            NodeFont = JsonEditorMainForm.JsonEditorForm.Font;
+            if (this.TreeView != null)
+            {
+                NodeFont = this.TreeView.Font;
+            }
         }
 
         /// <inheritdoc />
-        public override void UpdateWhenExpanding()
+        public override void AfterExpand()
         {
             Text = (Tag as JProperty).Name;
-            NodeFont = new Font(JsonEditorMainForm.JsonEditorForm.Font, FontStyle.Underline);
+            if (this.TreeView != null)
+            {
+                NodeFont = new Font(this.TreeView.Font, FontStyle.Underline);
+            }
         }
 
         /// <inheritdoc />
-        public override TreeNode UpdateWhenEditing(string jsonString)
+        public override TreeNode AfterJsonTextChange(string jsonString)
         {
             if (CheckEmptyJsonString(jsonString))
             {
@@ -67,10 +73,10 @@ namespace ZTn.Json.Editor.Drawing
             }
 
             // To allow parsing, the partial json string is first enclosed as a json object
-            JsonEditorSource jsonEditorSource;
+            JTokenRoot jTokenRoot;
             try
             {
-                jsonEditorSource = new JsonEditorSource("{" + jsonString + "}");
+                jTokenRoot = new JTokenRoot("{" + jsonString + "}");
             }
             catch
             {
@@ -79,27 +85,27 @@ namespace ZTn.Json.Editor.Drawing
 
             // Extract the contained JProperties as the JObject was only a container
             // As Json.NET internally clones JToken instances having Parent!=null when inserting in a JContainer,
-            // explicitly clones the new JProperties nullify Parent and to know the instances 
-            List<JProperty> jParsedProperties = ((JObject)jsonEditorSource.RootJToken)
-                .Properties()
+            // explicitly clones the new JProperties to nullify Parent and to know of the instances
+            List<JProperty> jParsedProperties = ((JObject)jTokenRoot.JTokenValue).Properties()
                 .Select(p => new JProperty(p))
-                .ToList();
-
-            // Build a new list of TreeNodes for these JProperties
-            List<JPropertyTreeNode> jParsedTreeNode = jParsedProperties
-                .Select(p => JsonTreeNodeBuilder.JsonVisitor(p))
-                .Cast<JPropertyTreeNode>()
                 .ToList();
 
             // Update the properties of parent JObject by inserting jParsedProperties and removing edited JProperty
             JObject jObjectParent = (JObject)JPropertyTag.Parent;
+
             List<JProperty> jProperties = jObjectParent.Properties()
                 .SelectMany(p => Object.ReferenceEquals(p, JPropertyTag) ? jParsedProperties : new List<JProperty>() { p })
                 .Distinct(new Editor.Linq.JPropertyEqualityComparer())
                 .ToList();
             jObjectParent.ReplaceAll(jProperties);
 
-            return UpdateTreeNodes(jParsedTreeNode);
+            // Build a new list of TreeNodes for these JProperties
+            List<JPropertyTreeNode> jParsedTreeNodes = jParsedProperties
+                .Select(p => JsonTreeNodeBuilder.Create(p))
+                .Cast<JPropertyTreeNode>()
+                .ToList();
+
+            return UpdateTreeNodes(jParsedTreeNodes);
         }
 
         #endregion
