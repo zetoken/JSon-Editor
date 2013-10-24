@@ -36,6 +36,25 @@ namespace ZTn.Json.Editor
 
         #endregion
 
+        #region >> Form
+
+        /// <inheritdoc />
+        /// <remarks>
+        /// Optimization aiming to reduce flickering on large documents (successfully).
+        /// Source: http://stackoverflow.com/a/89125/1774251
+        /// </remarks>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
+        #endregion
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog()
