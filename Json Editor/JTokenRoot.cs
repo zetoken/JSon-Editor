@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZTn.Json.Editor.Drawing;
+using ZTn.Json.Editor.Forms;
 
 namespace ZTn.Json.Editor
 {

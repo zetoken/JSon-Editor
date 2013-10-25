@@ -47,26 +47,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawing\JsonTreeNodeFactory.cs" />
-    <Compile Include="Drawing\JValueTreeNode.cs" />
-    <Compile Include="Drawing\IJsonTreeNode.cs" />
-    <Compile Include="Drawing\JArrayTreeNode.cs" />
-    <Compile Include="Drawing\JObjectTreeNode.cs" />
-    <Compile Include="Drawing\JPropertyTreeNode.cs" />
-    <Compile Include="Drawing\JTokenTreeNode.cs" />
-    <Compile Include="Drawing\UnattendedJTokenTypeException.cs" />
+    <Compile Include="Forms\JObjectContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\JsonTreeNodeFactory.cs" />
+    <Compile Include="Forms\JTokenContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\JValueTreeNode.cs" />
+    <Compile Include="Forms\IJsonTreeNode.cs" />
+    <Compile Include="Forms\JArrayTreeNode.cs" />
+    <Compile Include="Forms\JObjectTreeNode.cs" />
+    <Compile Include="Forms\JPropertyTreeNode.cs" />
+    <Compile Include="Forms\JTokenTreeNode.cs" />
+    <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
     <Compile Include="JTokenRoot.cs" />
-    <Compile Include="JsonEditorMainForm.cs">
+    <Compile Include="Forms\JsonEditorMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="JsonEditorMainForm.Designer.cs">
+    <Compile Include="Forms\JsonEditorMainForm.Designer.cs">
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Linq\ForEachExtension.cs" />
     <Compile Include="Linq\JPropertyEqualityComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="JsonEditorMainForm.resx">
+    <EmbeddedResource Include="Forms\JsonEditorMainForm.resx">
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -92,6 +98,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

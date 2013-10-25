@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-namespace ZTn.Json.Editor.Drawing
+namespace ZTn.Json.Editor.Forms
 {
     interface IJsonTreeNode
     {

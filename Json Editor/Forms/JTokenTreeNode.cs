@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Linq;
 
-namespace ZTn.Json.Editor.Drawing
+namespace ZTn.Json.Editor.Forms
 {
     /// <summary>
     /// Specialized <see cref="TreeNode"/> for handling <see cref="JToken"/> representation in a <see cref="TreeView"/>.
@@ -28,6 +28,7 @@ namespace ZTn.Json.Editor.Drawing
         public JTokenTreeNode(JToken jToken)
         {
             Tag = jToken;
+            ContextMenuStrip = new JTokenContextMenuStrip();
             AfterCollapse();
         }
 
@@ -102,7 +103,7 @@ namespace ZTn.Json.Editor.Drawing
         /// Remove <see cref="JTokenTreeNode"/>s from the parent of current <see cref="TreeNode"/> having a detached JTokenTag property.
         /// </summary>
         /// <returns>First available <see cref="TreeNode"/> or null if the parent has no children.</returns>
-        protected TreeNode CleanParentTreeNode()
+        public TreeNode CleanParentTreeNode()
         {
             TreeNode parent = Parent;
 
@@ -123,7 +124,7 @@ namespace ZTn.Json.Editor.Drawing
         /// </summary>
         /// <param name="newNode"></param>
         /// <returns></returns>
-        protected TreeNode UpdateParentTreeNode(TreeNode newNode)
+        public TreeNode UpdateParentTreeNode(TreeNode newNode)
         {
             if (newNode != this)
             {

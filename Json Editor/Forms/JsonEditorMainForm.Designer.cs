@@ -1,4 +1,4 @@
-﻿namespace ZTn.Json.Editor
+﻿namespace ZTn.Json.Editor.Forms
 {
     partial class JsonEditorMainForm
     {
@@ -168,6 +168,7 @@
             this.jsonTreeView.Name = "jsonTreeView";
             this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
             this.jsonTreeView.TabIndex = 0;
+            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
             this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.JsonTreeView_NodeMouseClick);
             // 
             // jsonTypeComboBox

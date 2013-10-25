@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZTn.Json.Editor.Drawing
+namespace ZTn.Json.Editor.Forms
 {
     /// <summary>
     /// Exception thrown when a <see cref="JToken"/> instance is of an unattended type.

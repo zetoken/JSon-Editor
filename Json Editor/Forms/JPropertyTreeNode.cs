@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Linq;
 
-namespace ZTn.Json.Editor.Drawing
+namespace ZTn.Json.Editor.Forms
 {
     /// <summary>
     /// Specialized <see cref="TreeNode"/> for handling <see cref="JProperty"/> representation in a <see cref="TreeView"/>.

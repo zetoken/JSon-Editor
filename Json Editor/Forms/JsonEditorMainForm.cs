@@ -9,10 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZTn.Json.Editor.Drawing;
+using ZTn.Json.Editor.Forms;
 using ZTn.Json.Editor.Linq;
 
-namespace ZTn.Json.Editor
+namespace ZTn.Json.Editor.Forms
 {
     public sealed partial class JsonEditorMainForm : Form
     {
@@ -131,60 +131,15 @@ namespace ZTn.Json.Editor
                 .ForEach(n => n.Expand());
         }
 
-        #region >> JsonTreeView_NodeMouseClick
-
         /// <summary>
-        /// Main event handler dynamically dispatching the handling to specialized methods.
+        /// For the clicked node to be selected.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void JsonTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             jsonTreeView.SelectedNode = e.Node;
-            JsonTreeView_NodeMouseClick((dynamic)e.Node, e);
         }
-
-        /// <summary>
-        /// Default catcher in case of a node of unattended type.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="e"></param>
-        private void JsonTreeView_NodeMouseClick(TreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = "";
-
-            jsonTypeComboBox.Text = JTokenType.Undefined.ToString();
-
-            jsonValueTextBox.ReadOnly = true;
-        }
-
-        private void JsonTreeView_NodeMouseClick(JTokenTreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
-
-            jsonTypeComboBox.Text = node.JTokenTag.Type.ToString();
-
-            jsonValueTextBox.Text = node.JTokenTag.ToString();
-        }
-
-        private void JsonTreeView_NodeMouseClick(JValueTreeNode node, TreeNodeMouseClickEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
-
-            jsonTypeComboBox.Text = node.jValueTag.Type.ToString();
-
-            switch (node.jValueTag.Type)
-            {
-                case JTokenType.String:
-                    jsonValueTextBox.Text = "\"" + node.jValueTag.ToString() + "\"";
-                    break;
-                default:
-                    jsonValueTextBox.Text = node.jValueTag.ToString();
-                    break;
-            }
-        }
-
-        #endregion
 
         private void JsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
@@ -224,5 +179,59 @@ namespace ZTn.Json.Editor
         {
             jsonValueTextBox.TextChanged += JsonValueTextBox_TextChanged;
         }
+
+        #region >> Methods jsonTreeView_AfterSelect
+
+        /// <summary>
+        /// Main event handler dynamically dispatching the handling to specialized methods.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void jsonTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            jsonTreeView_AfterSelect((dynamic)e.Node,e);
+        }
+
+        /// <summary>
+        /// Default catcher in case of a node of unattended type.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="e"></param>
+        private void jsonTreeView_AfterSelect(TreeNode node, TreeViewEventArgs e)
+        {
+            newtonsoftJsonTypeTextBox.Text = "";
+
+            jsonTypeComboBox.Text = JTokenType.Undefined.ToString();
+
+            jsonValueTextBox.ReadOnly = true;
+        }
+
+        private void jsonTreeView_AfterSelect(JTokenTreeNode node, TreeViewEventArgs e)
+        {
+            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
+
+            jsonTypeComboBox.Text = node.JTokenTag.Type.ToString();
+
+            jsonValueTextBox.Text = node.JTokenTag.ToString();
+        }
+
+        private void jsonTreeView_AfterSelect(JValueTreeNode node, TreeViewEventArgs e)
+        {
+            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
+
+            jsonTypeComboBox.Text = node.jValueTag.Type.ToString();
+
+            switch (node.jValueTag.Type)
+            {
+                case JTokenType.String:
+                    jsonValueTextBox.Text = "\"" + node.jValueTag.ToString() + "\"";
+                    break;
+                default:
+                    jsonValueTextBox.Text = node.jValueTag.ToString();
+                    break;
+            }
+        }
+
+        #endregion
     }
 }

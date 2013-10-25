@@ -16,7 +16,7 @@ namespace ZTn.Json.Editor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new JsonEditorMainForm());
+            Application.Run(new Forms.JsonEditorMainForm());
         }
     }
 }

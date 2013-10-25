@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ZTn.Json.Editor.Drawing
+namespace ZTn.Json.Editor.Forms
 {
     sealed class JsonTreeNodeFactory
     {
@@ -49,7 +49,7 @@ namespace ZTn.Json.Editor.Drawing
         /// <returns></returns>
         public static TreeNode Create(JArray obj, int depth)
         {
-            var node = new Drawing.JArrayTreeNode(obj);
+            var node = new Forms.JArrayTreeNode(obj);
 
             if (depth != 1)
             {
@@ -71,7 +71,7 @@ namespace ZTn.Json.Editor.Drawing
         /// <returns></returns>
         public static TreeNode Create(JObject obj, int depth)
         {
-            var node = new Drawing.JObjectTreeNode(obj);
+            var node = new Forms.JObjectTreeNode(obj);
 
             if (depth != 1)
             {
@@ -92,7 +92,7 @@ namespace ZTn.Json.Editor.Drawing
         /// <returns></returns>
         public static TreeNode Create(JProperty obj, int depth)
         {
-            var node = new Drawing.JPropertyTreeNode(obj);
+            var node = new Forms.JPropertyTreeNode(obj);
 
             if (depth != 1)
             {
@@ -127,7 +127,7 @@ namespace ZTn.Json.Editor.Drawing
         /// <returns></returns>
         public static TreeNode Create(JValue obj, int depth)
         {
-            var node = new Drawing.JValueTreeNode(obj);
+            var node = new Forms.JValueTreeNode(obj);
 
             return node;
         }
