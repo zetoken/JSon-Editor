@@ -79,7 +79,7 @@ namespace ZTn.Json.Editor
                 }
 
                 jsonTreeView.Nodes.Clear();
-                jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+                jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
                 jsonTreeView.Nodes
                     .Cast<TreeNode>()
                     .ForEach(n => n.Expand());
@@ -114,7 +114,7 @@ namespace ZTn.Json.Editor
             jsonEditorItem = new JTokenRoot("{}");
 
             jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());
@@ -125,7 +125,7 @@ namespace ZTn.Json.Editor
             jsonEditorItem = new JTokenRoot("[]");
 
             jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeBuilder.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());

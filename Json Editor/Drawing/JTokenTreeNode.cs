@@ -77,7 +77,7 @@ namespace ZTn.Json.Editor.Drawing
                 JTokenTag.Replace(jTokenRoot.JTokenValue);
             }
 
-            return UpdateParentTreeNode(JsonTreeNodeBuilder.Create(jTokenRoot.JTokenValue));
+            return UpdateParentTreeNode(JsonTreeNodeFactory.Create(jTokenRoot.JTokenValue));
         }
 
         #endregion

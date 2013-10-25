@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawing\JsonTreeNodeBuilder.cs" />
+    <Compile Include="Drawing\JsonTreeNodeFactory.cs" />
     <Compile Include="Drawing\JValueTreeNode.cs" />
     <Compile Include="Drawing\IJsonTreeNode.cs" />
     <Compile Include="Drawing\JArrayTreeNode.cs" />

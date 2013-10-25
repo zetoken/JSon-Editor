@@ -101,7 +101,7 @@ namespace ZTn.Json.Editor.Drawing
 
             // Build a new list of TreeNodes for these JProperties
             List<JPropertyTreeNode> jParsedTreeNodes = jParsedProperties
-                .Select(p => JsonTreeNodeBuilder.Create(p))
+                .Select(p => JsonTreeNodeFactory.Create(p))
                 .Cast<JPropertyTreeNode>()
                 .ToList();
 
