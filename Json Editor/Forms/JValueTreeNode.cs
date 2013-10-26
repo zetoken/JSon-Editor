@@ -27,6 +27,7 @@ namespace ZTn.Json.Editor.Forms
         public JValueTreeNode(JToken jValue)
             : base(jValue)
         {
+            ContextMenuStrip = new JValueContextMenuStrip();
         }
 
         public JValueTreeNode(JToken jValue, Action<JValueTreeNode> callBack)

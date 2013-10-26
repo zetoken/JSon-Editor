@@ -9,10 +9,11 @@ namespace ZTn.Json.Editor.Forms
 {
     class JTokenContextMenuStrip : ContextMenuStrip
     {
-        ToolStripItem collapseAllToolStripItem = new ToolStripMenuItem("Collapse All", null, CollapseAll_Click);
-        ToolStripItem expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
+        protected ToolStripItem collapseAllToolStripItem = new ToolStripMenuItem("Collapse All", null, CollapseAll_Click);
+        protected ToolStripItem expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
+        protected ToolStripItem removeNodeToolStripItem = new ToolStripMenuItem("Remove All", null, RemoveNode_Click);
 
-        #region >> Constructors
+       #region >> Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JTokenContextMenuStrip"/> class.
@@ -22,6 +23,8 @@ namespace ZTn.Json.Editor.Forms
         {
             Items.Add(collapseAllToolStripItem);
             Items.Add(expandAllToolStripItem);
+            Items.Add(new ToolStripSeparator());
+            Items.Add(removeNodeToolStripItem);
         }
 
         #endregion
@@ -31,12 +34,13 @@ namespace ZTn.Json.Editor.Forms
         /// <inheritdoc />
         protected override void OnVisibleChanged(EventArgs e)
         {
-            TreeNode jTokenTreeNode = GetSourceTreeNode(this);
+            JTokenTreeNode jTokenTreeNode = GetSourceTreeNode(this) as JTokenTreeNode;
 
             if (Visible)
             {
-                collapseAllToolStripItem.Visible = jTokenTreeNode.IsExpanded;
-                expandAllToolStripItem.Visible = !jTokenTreeNode.IsExpanded;
+                collapseAllToolStripItem.Visible = jTokenTreeNode.IsExpanded && jTokenTreeNode.JTokenTag.HasValues;
+                expandAllToolStripItem.Visible = !jTokenTreeNode.IsExpanded && jTokenTreeNode.JTokenTag.HasValues;
+                removeNodeToolStripItem.Visible = (jTokenTreeNode.Parent != null) && !(jTokenTreeNode.Parent is JPropertyTreeNode);
             }
 
             base.OnVisibleChanged(e);
@@ -103,6 +107,19 @@ namespace ZTn.Json.Editor.Forms
                 treeNode.TreeView.BeginUpdate();
                 treeNode.ExpandAll();
                 treeNode.TreeView.EndUpdate();
+            }
+        }
+
+        private static void RemoveNode_Click(Object sender, EventArgs e)
+        {
+            JTokenTreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem) as JTokenTreeNode;
+            if (treeNode != null)
+            {
+                TreeView treeView = treeNode.TreeView;
+                treeView.BeginUpdate();
+                treeNode.JTokenTag.Remove();
+                treeNode.CleanParentTreeNode();
+                treeView.EndUpdate();
             }
         }
     }

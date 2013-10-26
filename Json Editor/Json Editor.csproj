@@ -54,6 +54,9 @@
     <Compile Include="Forms\JTokenContextMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\JValueContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\JValueTreeNode.cs" />
     <Compile Include="Forms\IJsonTreeNode.cs" />
     <Compile Include="Forms\JArrayTreeNode.cs" />
