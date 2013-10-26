@@ -24,20 +24,15 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Constructor
+        #region >> Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JPropertyTreeNode"/> class.
+        /// </summary>
         public JPropertyTreeNode(JProperty jProperty)
             : base(jProperty)
         {
-        }
-
-        public JPropertyTreeNode(JProperty jProperty, Action<JPropertyTreeNode> callBack)
-            : this(jProperty)
-        {
-            if (callBack != null)
-            {
-                callBack(this);
-            }
+            ContextMenuStrip = new JPropertyContextMenuStrip();
         }
 
         #endregion
@@ -47,7 +42,7 @@ namespace ZTn.Json.Editor.Forms
         /// <inheritdoc />
         public override void AfterCollapse()
         {
-            Text = (Tag as JProperty).ToString();
+            base.AfterCollapse();
             if (this.TreeView != null)
             {
                 NodeFont = this.TreeView.Font;
@@ -57,7 +52,7 @@ namespace ZTn.Json.Editor.Forms
         /// <inheritdoc />
         public override void AfterExpand()
         {
-            Text = (Tag as JProperty).Name;
+            Text = JPropertyTag.Name;
             if (this.TreeView != null)
             {
                 NodeFont = new Font(this.TreeView.Font, FontStyle.Underline);

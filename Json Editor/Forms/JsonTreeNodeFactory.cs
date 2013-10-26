@@ -8,8 +8,14 @@ using System.Windows.Forms;
 
 namespace ZTn.Json.Editor.Forms
 {
+    /// <summary>
+    /// Factory allowing to create <see cref="TreeNode"/> encapsulating a given <see cref="JToken"/> instance.
+    /// </summary>
     sealed class JsonTreeNodeFactory
     {
+        /// <summary>
+        /// This depth value allow recursive creation of <see cref="TreeNode"/> for each subnode, without any depth limit.
+        /// </summary>
         public const int UnlimitedDepth = 0;
 
         #region >> Create

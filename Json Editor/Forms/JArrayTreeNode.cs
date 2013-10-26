@@ -22,22 +22,15 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Constructor
+        #region >> Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JArrayTreeNode"/> class.
+        /// </summary>
         public JArrayTreeNode(JArray jArray)
             : base(jArray)
         {
-            Tag = jArray;
-            AfterCollapse();
-        }
-
-        public JArrayTreeNode(JArray jArray, Action<JArrayTreeNode> callBack)
-            : this(jArray)
-        {
-            if (callBack != null)
-            {
-                callBack(this);
-            }
+            ContextMenuStrip = new JArrayContextMenuStrip();
         }
 
         #endregion

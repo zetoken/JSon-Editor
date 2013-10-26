@@ -22,37 +22,16 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Constructor
+        #region >> Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JValueTreeNode"/> class.
+        /// </summary>
+        /// <param name="jValue"></param>
         public JValueTreeNode(JToken jValue)
             : base(jValue)
         {
             ContextMenuStrip = new JValueContextMenuStrip();
-        }
-
-        public JValueTreeNode(JToken jValue, Action<JValueTreeNode> callBack)
-            : this(jValue)
-        {
-            if (callBack != null)
-            {
-                callBack(this);
-            }
-        }
-
-        #endregion
-
-        #region >> JTokenTreeNode
-
-        /// <inheritdoc />
-        public override void AfterCollapse()
-        {
-            Text = (Tag as JValue).ToString();
-        }
-
-        /// <inheritdoc />
-        public override void AfterExpand()
-        {
-            Text = (Tag as JValue).ToString();
         }
 
         #endregion

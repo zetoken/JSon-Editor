@@ -23,22 +23,17 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Constructor
+        #region >> Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JTokenTreeNode"/> class.
+        /// </summary>
+        /// <param name="jToken"></param>
         public JTokenTreeNode(JToken jToken)
         {
             Tag = jToken;
             ContextMenuStrip = new JTokenContextMenuStrip();
             AfterCollapse();
-        }
-
-        public JTokenTreeNode(JToken jToken, Action<JTokenTreeNode> callBack)
-            : this(jToken)
-        {
-            if (callBack != null)
-            {
-                callBack(this);
-            }
         }
 
         #endregion

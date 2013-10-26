@@ -47,7 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\JArrayContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\JObjectContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\JPropertyContextMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\JsonTreeNodeFactory.cs" />

@@ -22,21 +22,15 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Constructor
+        #region >> Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JObjectTreeNode"/> class.
+        /// </summary>
         public JObjectTreeNode(JObject jObject)
             : base(jObject)
         {
             ContextMenuStrip = new JObjectContextMenuStrip();
-        }
-
-        public JObjectTreeNode(JObject jObject, Action<JObjectTreeNode> callBack)
-            : this(jObject)
-        {
-            if (callBack != null)
-            {
-                callBack(this);
-            }
         }
 
         #endregion

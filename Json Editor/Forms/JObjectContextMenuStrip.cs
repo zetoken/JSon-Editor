@@ -10,7 +10,8 @@ namespace ZTn.Json.Editor.Forms
 {
     sealed class JObjectContextMenuStrip : JTokenContextMenuStrip
     {
-        ToolStripItem addPropertyToolStripItem = new ToolStripMenuItem("Add Property", null, AddProperty_Click);
+        ToolStripMenuItem objectToolStripItem;
+        ToolStripMenuItem addPropertyToolStripItem;
 
         #region >> Constructors
 
@@ -20,21 +21,30 @@ namespace ZTn.Json.Editor.Forms
         public JObjectContextMenuStrip() :
             base()
         {
-            Items.Add(new ToolStripSeparator());
-            Items.Add(addPropertyToolStripItem);
+            objectToolStripItem = new ToolStripMenuItem("Json Object");
+            addPropertyToolStripItem = new ToolStripMenuItem("Add Property", null, AddProperty_Click);
+
+            objectToolStripItem.DropDownItems.Add(addPropertyToolStripItem);
+            Items.Add(objectToolStripItem);
         }
 
         #endregion
 
-        private static void AddProperty_Click(Object sender, EventArgs e)
+        /// <summary>
+        /// Click event handler for <see cref="addPropertyToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddProperty_Click(Object sender, EventArgs e)
         {
-            JObjectTreeNode jObjectTreeNode = GetSourceTreeNode(sender as ToolStripItem) as JObjectTreeNode;
+            JObjectTreeNode jObjectTreeNode = jTokenTreeNode as JObjectTreeNode;
+
             if (jObjectTreeNode == null)
             {
                 return;
             }
 
-            JProperty newJProperty = new JProperty("new" + DateTime.Now.Ticks, "v");
+            JProperty newJProperty = new JProperty("name" + DateTime.Now.Ticks, "v");
             jObjectTreeNode.JObjectTag.AddFirst(newJProperty);
 
             JPropertyTreeNode jPropertyTreeNode = (JPropertyTreeNode)JsonTreeNodeFactory.Create(newJProperty);

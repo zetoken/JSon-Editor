@@ -9,11 +9,16 @@ namespace ZTn.Json.Editor.Forms
 {
     class JTokenContextMenuStrip : ContextMenuStrip
     {
-        protected ToolStripItem collapseAllToolStripItem = new ToolStripMenuItem("Collapse All", null, CollapseAll_Click);
-        protected ToolStripItem expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
-        protected ToolStripItem removeNodeToolStripItem = new ToolStripMenuItem("Remove All", null, RemoveNode_Click);
+        /// <summary>
+        /// Source <see cref="TreeNode"/> at the origin of this <see cref="ContextMenuStrip"/>
+        /// </summary>
+        protected JTokenTreeNode jTokenTreeNode;
 
-       #region >> Constructors
+        protected ToolStripItem collapseAllToolStripItem;
+        protected ToolStripItem expandAllToolStripItem;
+        protected ToolStripItem removeNodeToolStripItem;
+
+        #region >> Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JTokenContextMenuStrip"/> class.
@@ -21,9 +26,12 @@ namespace ZTn.Json.Editor.Forms
         public JTokenContextMenuStrip()
             : base()
         {
+            collapseAllToolStripItem = new ToolStripMenuItem("Collapse All", null, CollapseAll_Click);
+            expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
+            removeNodeToolStripItem = new ToolStripMenuItem("Remove All", null, RemoveNode_Click);
+
             Items.Add(collapseAllToolStripItem);
             Items.Add(expandAllToolStripItem);
-            Items.Add(new ToolStripSeparator());
             Items.Add(removeNodeToolStripItem);
         }
 
@@ -34,10 +42,10 @@ namespace ZTn.Json.Editor.Forms
         /// <inheritdoc />
         protected override void OnVisibleChanged(EventArgs e)
         {
-            JTokenTreeNode jTokenTreeNode = GetSourceTreeNode(this) as JTokenTreeNode;
-
             if (Visible)
             {
+                jTokenTreeNode = GetSourceTreeNode() as JTokenTreeNode;
+
                 collapseAllToolStripItem.Visible = jTokenTreeNode.IsExpanded && jTokenTreeNode.JTokenTag.HasValues;
                 expandAllToolStripItem.Visible = !jTokenTreeNode.IsExpanded && jTokenTreeNode.JTokenTag.HasValues;
                 removeNodeToolStripItem.Visible = (jTokenTreeNode.Parent != null) && !(jTokenTreeNode.Parent is JPropertyTreeNode);
@@ -48,79 +56,72 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
-        #region >> Methods GetSourceTreeNode
+        /// <summary>
+        /// Click event handler for <see cref="collapseAllToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void CollapseAll_Click(Object sender, EventArgs e)
+        {
+            if (jTokenTreeNode != null)
+            {
+                jTokenTreeNode.TreeView.BeginUpdate();
+                jTokenTreeNode.Collapse(false);
+                jTokenTreeNode.TreeView.EndUpdate();
+            }
+        }
 
         /// <summary>
-        /// Identify the <see cref="TreeNode"/> that generated a <see cref="ContextMenuStrip"/> instance.
+        /// Click event handler for <see cref="expandAllToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ExpandAll_Click(Object sender, EventArgs e)
+        {
+            if (jTokenTreeNode != null)
+            {
+                jTokenTreeNode.TreeView.BeginUpdate();
+                jTokenTreeNode.ExpandAll();
+                jTokenTreeNode.TreeView.EndUpdate();
+            }
+        }
+
+        /// <summary>
+        /// Click event handler for <see cref="removeNodeToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void RemoveNode_Click(Object sender, EventArgs e)
+        {
+            if (jTokenTreeNode != null)
+            {
+                TreeView treeView = jTokenTreeNode.TreeView;
+                treeView.BeginUpdate();
+                jTokenTreeNode.JTokenTag.Remove();
+                jTokenTreeNode.CleanParentTreeNode();
+                treeView.EndUpdate();
+            }
+        }
+
+        /// <summary>
+        /// Identify the Source <see cref="TreeNode"/> at the origin of this <see cref="ContextMenuStrip"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <returns></returns>
-        protected static TreeNode GetSourceTreeNode(ContextMenuStrip contextMenuStrip)
+        TreeNode GetSourceTreeNode()
         {
-            if (contextMenuStrip == null)
+            if (SourceControl == null)
             {
                 return null;
             }
 
-            TreeView treeView = contextMenuStrip.SourceControl as TreeView;
-            if (treeView.SelectedNode == null)
+            TreeView treeView = SourceControl as TreeView;
+            if (treeView == null)
             {
                 return null;
             }
 
             return treeView.SelectedNode;
-        }
-
-        /// <summary>
-        /// Identify the <see cref="TreeNode"/> calling a <see cref="ToolStripItem"/> instance.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <returns></returns>
-        protected static TreeNode GetSourceTreeNode(ToolStripItem toolStripItem)
-        {
-            if (toolStripItem == null)
-            {
-                return null;
-            }
-
-            return GetSourceTreeNode(toolStripItem.Owner as ContextMenuStrip);
-        }
-
-        #endregion
-
-        private static void CollapseAll_Click(Object sender, EventArgs e)
-        {
-            TreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem);
-            if (treeNode != null)
-            {
-                treeNode.TreeView.BeginUpdate();
-                treeNode.Collapse(false);
-                treeNode.TreeView.EndUpdate();
-            }
-        }
-
-        private static void ExpandAll_Click(Object sender, EventArgs e)
-        {
-            TreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem);
-            if (treeNode != null)
-            {
-                treeNode.TreeView.BeginUpdate();
-                treeNode.ExpandAll();
-                treeNode.TreeView.EndUpdate();
-            }
-        }
-
-        private static void RemoveNode_Click(Object sender, EventArgs e)
-        {
-            JTokenTreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem) as JTokenTreeNode;
-            if (treeNode != null)
-            {
-                TreeView treeView = treeNode.TreeView;
-                treeView.BeginUpdate();
-                treeNode.JTokenTag.Remove();
-                treeNode.CleanParentTreeNode();
-                treeView.EndUpdate();
-            }
         }
     }
 }
