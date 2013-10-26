@@ -89,7 +89,9 @@ namespace ZTn.Json.Editor.Forms
             TreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem);
             if (treeNode != null)
             {
+                treeNode.TreeView.BeginUpdate();
                 treeNode.Collapse(false);
+                treeNode.TreeView.EndUpdate();
             }
         }
 
@@ -98,7 +100,9 @@ namespace ZTn.Json.Editor.Forms
             TreeNode treeNode = GetSourceTreeNode(sender as ToolStripItem);
             if (treeNode != null)
             {
+                treeNode.TreeView.BeginUpdate();
                 treeNode.ExpandAll();
+                treeNode.TreeView.EndUpdate();
             }
         }
     }
