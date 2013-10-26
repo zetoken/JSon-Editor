@@ -121,6 +121,20 @@ namespace ZTn.Json.Editor.Forms
         /// <returns></returns>
         public TreeNode UpdateParentTreeNode(TreeNode newNode)
         {
+            return UpdateParentTreeNode(newNode, true);
+        }
+
+        /// <summary>
+        /// Insert or replace a <paramref name="TreeNode"/> in current parent nodes.
+        /// </summary>
+        /// <param name="newNode"></param>
+        /// <param name="insertBefore">
+        /// Set to <c>true</c> to insert <paramref name="newNode"/> before current node.
+        /// Set to <c>fase</c> to insert <paramref name="newNode"/> after current node.
+        /// </param>
+        /// <returns></returns>
+        public TreeNode UpdateParentTreeNode(TreeNode newNode, bool insertBefore)
+        {
             if (newNode != this)
             {
                 TreeNodeCollection treeNodeCollection;
@@ -134,7 +148,15 @@ namespace ZTn.Json.Editor.Forms
                 }
                 int nodeIndex = treeNodeCollection.IndexOf(this);
 
-                treeNodeCollection.Insert(nodeIndex, newNode);
+                if (insertBefore)
+                {
+                    treeNodeCollection.Insert(nodeIndex, newNode);
+                }
+                else
+                {
+                    treeNodeCollection.Insert(nodeIndex + 1, newNode);
+                }
+
 
                 CleanParentTreeNode();
 

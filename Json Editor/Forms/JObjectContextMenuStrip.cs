@@ -11,7 +11,7 @@ namespace ZTn.Json.Editor.Forms
     sealed class JObjectContextMenuStrip : JTokenContextMenuStrip
     {
         ToolStripMenuItem objectToolStripItem;
-        ToolStripMenuItem addPropertyToolStripItem;
+        ToolStripMenuItem insertPropertyToolStripItem;
 
         #region >> Constructors
 
@@ -22,20 +22,20 @@ namespace ZTn.Json.Editor.Forms
             base()
         {
             objectToolStripItem = new ToolStripMenuItem("Json Object");
-            addPropertyToolStripItem = new ToolStripMenuItem("Add Property", null, AddProperty_Click);
+            insertPropertyToolStripItem = new ToolStripMenuItem("Insert Property", null, InsertProperty_Click);
 
-            objectToolStripItem.DropDownItems.Add(addPropertyToolStripItem);
+            objectToolStripItem.DropDownItems.Add(insertPropertyToolStripItem);
             Items.Add(objectToolStripItem);
         }
 
         #endregion
 
         /// <summary>
-        /// Click event handler for <see cref="addPropertyToolStripItem"/>.
+        /// Click event handler for <see cref="insertPropertyToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddProperty_Click(Object sender, EventArgs e)
+        private void InsertProperty_Click(Object sender, EventArgs e)
         {
             JObjectTreeNode jObjectTreeNode = jTokenTreeNode as JObjectTreeNode;
 

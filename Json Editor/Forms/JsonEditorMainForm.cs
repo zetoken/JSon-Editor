@@ -189,7 +189,7 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         private void jsonTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            jsonTreeView_AfterSelect((dynamic)e.Node,e);
+            jsonTreeView_AfterSelect((dynamic)e.Node, e);
         }
 
         /// <summary>
@@ -212,7 +212,11 @@ namespace ZTn.Json.Editor.Forms
 
             jsonTypeComboBox.Text = node.JTokenTag.Type.ToString();
 
-            jsonValueTextBox.Text = node.JTokenTag.ToString();
+            // If jsonValueTextBox is focused then it triggers this event in the update process, so don't update it again ! (risk: infinite loop between events).
+            if (!jsonValueTextBox.Focused)
+            {
+                jsonValueTextBox.Text = node.JTokenTag.ToString();
+            }
         }
 
         private void jsonTreeView_AfterSelect(JValueTreeNode node, TreeViewEventArgs e)

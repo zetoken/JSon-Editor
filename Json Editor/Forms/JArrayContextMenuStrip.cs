@@ -11,9 +11,9 @@ namespace ZTn.Json.Editor.Forms
     class JArrayContextMenuStrip : JTokenContextMenuStrip
     {
         ToolStripMenuItem arrayToolStripItem;
-        ToolStripMenuItem addArrayToolStripItem;
-        ToolStripMenuItem addObjectToolStripItem;
-        ToolStripMenuItem addValueToolStripItem;
+        ToolStripMenuItem insertArrayToolStripItem;
+        ToolStripMenuItem insertObjectToolStripItem;
+        ToolStripMenuItem insertValueToolStripItem;
 
         #region >> Constructors
 
@@ -21,53 +21,53 @@ namespace ZTn.Json.Editor.Forms
             : base()
         {
             arrayToolStripItem = new ToolStripMenuItem("Json Array");
-            addArrayToolStripItem = new ToolStripMenuItem("Add Array", null, AddArray_Click);
-            addObjectToolStripItem = new ToolStripMenuItem("Add Object", null, AddObject_Click);
-            addValueToolStripItem = new ToolStripMenuItem("Add Value", null, AddValue_Click);
+            insertArrayToolStripItem = new ToolStripMenuItem("Insert Array", null, InsertArray_Click);
+            insertObjectToolStripItem = new ToolStripMenuItem("Insert Object", null, InsertObject_Click);
+            insertValueToolStripItem = new ToolStripMenuItem("Insert Value", null, InsertValue_Click);
 
-            arrayToolStripItem.DropDownItems.Add(addArrayToolStripItem);
-            arrayToolStripItem.DropDownItems.Add(addObjectToolStripItem);
-            arrayToolStripItem.DropDownItems.Add(addValueToolStripItem);
+            arrayToolStripItem.DropDownItems.Add(insertArrayToolStripItem);
+            arrayToolStripItem.DropDownItems.Add(insertObjectToolStripItem);
+            arrayToolStripItem.DropDownItems.Add(insertValueToolStripItem);
             Items.Add(arrayToolStripItem);
         }
 
         #endregion
 
         /// <summary>
-        /// Click event handler for <see cref="addValueToolStripItem"/>.
+        /// Click event handler for <see cref="insertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddArray_Click(Object sender, EventArgs e)
+        private void InsertArray_Click(Object sender, EventArgs e)
         {
-            AddJToken(JArray.Parse("[]"));
+            InsertJToken(JArray.Parse("[]"));
         }
 
         /// <summary>
-        /// Click event handler for <see cref="addValueToolStripItem"/>.
+        /// Click event handler for <see cref="insertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddObject_Click(Object sender, EventArgs e)
+        private void InsertObject_Click(Object sender, EventArgs e)
         {
-            AddJToken(JObject.Parse("{}"));
+            InsertJToken(JObject.Parse("{}"));
         }
 
         /// <summary>
-        /// Click event handler for <see cref="addValueToolStripItem"/>.
+        /// Click event handler for <see cref="insertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddValue_Click(Object sender, EventArgs e)
+        private void InsertValue_Click(Object sender, EventArgs e)
         {
-            AddJToken(JValue.Parse("null"));
+            InsertJToken(JValue.Parse("null"));
         }
 
         /// <summary>
         /// Add a new <see cref="JToken"/> instance in current <see cref="JArrayTreeNode"/>
         /// </summary>
         /// <param name="newJToken"></param>
-        private void AddJToken(JToken newJToken)
+        private void InsertJToken(JToken newJToken)
         {
             JArrayTreeNode jArrayTreeNode = jTokenTreeNode as JArrayTreeNode;
 

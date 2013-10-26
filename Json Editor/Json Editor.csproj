@@ -70,6 +70,7 @@
     <Compile Include="Forms\JPropertyTreeNode.cs" />
     <Compile Include="Forms\JTokenTreeNode.cs" />
     <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
+    <Compile Include="EditorClipboard.cs" />
     <Compile Include="JTokenRoot.cs" />
     <Compile Include="Forms\JsonEditorMainForm.cs">
       <SubType>Form</SubType>
