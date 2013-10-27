@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Generic;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -31,7 +32,7 @@ namespace ZTn.Json.Editor.Forms
         public JValueTreeNode(JToken jValue)
             : base(jValue)
         {
-            ContextMenuStrip = new JValueContextMenuStrip();
+            ContextMenuStrip = SingleInstanceProvider<JValueContextMenuStrip>.Value;
         }
 
         #endregion

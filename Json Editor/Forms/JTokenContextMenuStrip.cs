@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Generic;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -39,12 +40,14 @@ namespace ZTn.Json.Editor.Forms
             expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
 
             editToolStripItem = new ToolStripMenuItem("Edit");
+
             copyNodeToolStripItem = new ToolStripMenuItem("Copy", null, CopyNode_Click);
             cutNodeToolStripItem = new ToolStripMenuItem("Cut", null, CutNode_Click);
             deleteNodeToolStripItem = new ToolStripMenuItem("Delete Node", null, DeleteNode_Click);
             pasteNodeAfterToolStripItem = new ToolStripMenuItem("Paste Node After", null, PasteNodeAfter_Click);
             pasteNodeBeforeToolStripItem = new ToolStripMenuItem("Paste Node Before", null, PasteNodeBefore_Click);
             pasteNodeReplaceToolStripItem = new ToolStripMenuItem("Replace", null, PasteNodeReplace_Click);
+
             editToolStripItem.DropDownItems.Add(copyNodeToolStripItem);
             editToolStripItem.DropDownItems.Add(cutNodeToolStripItem);
             editToolStripItem.DropDownItems.Add(pasteNodeBeforeToolStripItem);
@@ -94,8 +97,8 @@ namespace ZTn.Json.Editor.Forms
                     && (jTokenTreeNode.Parent != null)
                     && !(jTokenTreeNode.Parent is JPropertyTreeNode);
 
-                pasteNodeReplaceToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty();
-
+                pasteNodeReplaceToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
+                    && (jTokenTreeNode.Parent != null);
             }
 
             base.OnVisibleChanged(e);
@@ -113,7 +116,9 @@ namespace ZTn.Json.Editor.Forms
             if (jTokenTreeNode != null)
             {
                 jTokenTreeNode.TreeView.BeginUpdate();
+
                 jTokenTreeNode.Collapse(false);
+
                 jTokenTreeNode.TreeView.EndUpdate();
             }
         }
@@ -145,7 +150,7 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         void DeleteNode_Click(Object sender, EventArgs e)
         {
-            DeleteNode(jTokenTreeNode);
+            Delete(jTokenTreeNode);
         }
 
         /// <summary>
@@ -158,7 +163,9 @@ namespace ZTn.Json.Editor.Forms
             if (jTokenTreeNode != null)
             {
                 jTokenTreeNode.TreeView.BeginUpdate();
+
                 jTokenTreeNode.ExpandAll();
+
                 jTokenTreeNode.TreeView.EndUpdate();
             }
         }
@@ -170,31 +177,9 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         void PasteNodeAfter_Click(Object sender, EventArgs e)
         {
-            JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
-
-            JToken jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
-
-            try
-            {
-                jTokenTreeNode.JTokenTag.AddAfterSelf(jTokenSource);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-
-            TreeView treeView = jTokenTreeNode.TreeView;
-            treeView.BeginUpdate();
-
-            jTokenTreeNode.UpdateParentTreeNode(JsonTreeNodeFactory.Create(jTokenSource), false);
-
-            treeView.EndUpdate();
-
-            // If cut was asked, the clipboard is now empty and source should be removed from treeview
-            if (EditorClipboard<JTokenTreeNode>.IsEmpty())
-            {
-                DeleteNode(sourceJTokenTreeNode);
-            }
+            Paste(jt => jTokenTreeNode.JTokenTag.AddAfterSelf(jt),
+                n => jTokenTreeNode.UpdateParentTreeNode(n, false)
+                );
         }
 
         /// <summary>
@@ -204,31 +189,9 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         void PasteNodeBefore_Click(Object sender, EventArgs e)
         {
-            JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
-
-            JToken jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
-
-            try
-            {
-                jTokenTreeNode.JTokenTag.AddBeforeSelf(jTokenSource);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-
-            TreeView treeView = jTokenTreeNode.TreeView;
-            treeView.BeginUpdate();
-
-            jTokenTreeNode.UpdateParentTreeNode(JsonTreeNodeFactory.Create(jTokenSource), true);
-
-            treeView.EndUpdate();
-
-            // If cut was asked, the clipboard is now empty and source should be removed from treeview
-            if (EditorClipboard<JTokenTreeNode>.IsEmpty())
-            {
-                DeleteNode(sourceJTokenTreeNode);
-            }
+            Paste(jt => jTokenTreeNode.JTokenTag.AddBeforeSelf(jt),
+                n => jTokenTreeNode.UpdateParentTreeNode(n, true)
+                );
         }
 
         /// <summary>
@@ -238,31 +201,9 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         void PasteNodeReplace_Click(Object sender, EventArgs e)
         {
-            JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
-
-            JToken jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
-
-            try
-            {
-                jTokenTreeNode.JTokenTag.Replace(jTokenSource);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-
-            TreeView treeView = jTokenTreeNode.TreeView;
-            treeView.BeginUpdate();
-
-            jTokenTreeNode.UpdateParentTreeNode(JsonTreeNodeFactory.Create(jTokenSource), true);
-
-            treeView.EndUpdate();
-
-            // If cut was asked, the clipboard is now empty and source should be removed from treeview
-            if (EditorClipboard<JTokenTreeNode>.IsEmpty())
-            {
-                DeleteNode(sourceJTokenTreeNode);
-            }
+            Paste(jt => jTokenTreeNode.JTokenTag.Replace(jt),
+                n => jTokenTreeNode.UpdateParentTreeNode(n, true)
+                );
         }
 
         /// <summary>
@@ -286,19 +227,73 @@ namespace ZTn.Json.Editor.Forms
             return treeView.SelectedNode;
         }
 
-        void DeleteNode(JTokenTreeNode node)
+        /// <summary>
+        /// Implementation of "delete" action.
+        /// </summary>
+        /// <param name="node"></param>
+        void Delete(JTokenTreeNode node)
         {
             if (node != null)
             {
-                TreeView treeView = node.TreeView;
-                treeView.BeginUpdate();
+                try
+                {
+                    node.JTokenTag.Remove();
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Deletion action failed");
 
-                node.JTokenTag.Remove();
+                    return;
+                }
+
+                node.TreeView.BeginUpdate();
+
                 node.CleanParentTreeNode();
 
-                treeView.EndUpdate();
+                node.TreeView.EndUpdate();
             }
         }
 
+        /// <summary>
+        /// Implementation of "paste" action using 2 delegates for the concrete action on JToken tree and TreeView.
+        /// </summary>
+        /// <param name="pasteJTokenImplementation">Implementation of paste action in the JToken tree.</param>
+        /// <param name="pasteJTokenImplementation">Implementation of paste action in the treeView.</param>
+        void Paste(Action<JToken> pasteJTokenImplementation, Action<TreeNode> pasteTreeNodeImplementation)
+        {
+            JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
+
+            JToken jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
+
+            try
+            {
+                pasteJTokenImplementation(jTokenSource);
+            }
+            catch (Exception exception)
+            {
+                // If cut was asked, the clipboard is now empty and source should be inserted again in clipboard
+                if (EditorClipboard<JTokenTreeNode>.IsEmpty())
+                {
+                    EditorClipboard<JTokenTreeNode>.Set(sourceJTokenTreeNode, false);
+                }
+
+                MessageBox.Show(exception.Message, "Editing action failed");
+
+                return;
+            }
+
+            TreeView treeView = jTokenTreeNode.TreeView;
+            treeView.BeginUpdate();
+
+            pasteTreeNodeImplementation(JsonTreeNodeFactory.Create(jTokenSource));
+
+            treeView.EndUpdate();
+
+            // If cut was asked, the clipboard is now empty and source should be removed from treeview
+            if (EditorClipboard<JTokenTreeNode>.IsEmpty())
+            {
+                Delete(sourceJTokenTreeNode);
+            }
+        }
     }
 }

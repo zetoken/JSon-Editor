@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Generic;
 using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor.Forms
@@ -32,7 +33,7 @@ namespace ZTn.Json.Editor.Forms
         public JTokenTreeNode(JToken jToken)
         {
             Tag = jToken;
-            ContextMenuStrip = new JTokenContextMenuStrip();
+            ContextMenuStrip = SingleInstanceProvider<JTokenContextMenuStrip>.Value;
             AfterCollapse();
         }
 

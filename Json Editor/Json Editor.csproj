@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\doc.ZTn.Json.Editor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -70,7 +71,7 @@
     <Compile Include="Forms\JPropertyTreeNode.cs" />
     <Compile Include="Forms\JTokenTreeNode.cs" />
     <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
-    <Compile Include="EditorClipboard.cs" />
+    <Compile Include="Generic\EditorClipboard.cs" />
     <Compile Include="JTokenRoot.cs" />
     <Compile Include="Forms\JsonEditorMainForm.cs">
       <SubType>Form</SubType>
@@ -82,6 +83,7 @@
     <Compile Include="Linq\JPropertyEqualityComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Generic\SingleInstanceProvider.cs" />
     <EmbeddedResource Include="Forms\JsonEditorMainForm.resx">
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
     </EmbeddedResource>
