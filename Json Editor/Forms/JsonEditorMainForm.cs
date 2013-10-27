@@ -30,8 +30,8 @@ namespace ZTn.Json.Editor.Forms
 
             jsonTypeComboBox.DataSource = Enum.GetValues(typeof(JTokenType));
 
-            jsonTreeView.AfterCollapse += JsonTreeView_AfterCollapse;
-            jsonTreeView.AfterExpand += JsonTreeView_AfterExpand;
+            jsonTreeView.AfterCollapse += jsonTreeView_AfterCollapse;
+            jsonTreeView.AfterExpand += jsonTreeView_AfterExpand;
         }
 
         #endregion
@@ -131,17 +131,22 @@ namespace ZTn.Json.Editor.Forms
                 .ForEach(n => n.Expand());
         }
 
+        private void aboutJsonEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AboutBox().ShowDialog();
+        }
+
         /// <summary>
         /// For the clicked node to be selected.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void JsonTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void jsonTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             jsonTreeView.SelectedNode = e.Node;
         }
 
-        private void JsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
+        private void jsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
             IJsonTreeNode node = e.Node as IJsonTreeNode;
             if (node != null)
@@ -150,7 +155,7 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
-        private void JsonTreeView_AfterExpand(object sender, TreeViewEventArgs e)
+        private void jsonTreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
             IJsonTreeNode node = e.Node as IJsonTreeNode;
             if (node != null)
@@ -159,7 +164,7 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
-        private void JsonValueTextBox_TextChanged(object sender, EventArgs e)
+        private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
             IJsonTreeNode node = jsonTreeView.SelectedNode as IJsonTreeNode;
             if (node != null)
@@ -172,12 +177,12 @@ namespace ZTn.Json.Editor.Forms
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
         {
-            jsonValueTextBox.TextChanged -= JsonValueTextBox_TextChanged;
+            jsonValueTextBox.TextChanged -= jsonValueTextBox_TextChanged;
         }
 
         private void jsonValueTextBox_Enter(object sender, EventArgs e)
         {
-            jsonValueTextBox.TextChanged += JsonValueTextBox_TextChanged;
+            jsonValueTextBox.TextChanged += jsonValueTextBox_TextChanged;
         }
 
         #region >> Methods jsonTreeView_AfterSelect
@@ -189,7 +194,7 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="e"></param>
         private void jsonTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            jsonTreeView_AfterSelect((dynamic)e.Node, e);
+            JsonTreeView_AfterSelectImplementation((dynamic)e.Node, e);
         }
 
         /// <summary>
@@ -197,7 +202,7 @@ namespace ZTn.Json.Editor.Forms
         /// </summary>
         /// <param name="node"></param>
         /// <param name="e"></param>
-        private void jsonTreeView_AfterSelect(TreeNode node, TreeViewEventArgs e)
+        private void JsonTreeView_AfterSelectImplementation(TreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = "";
 
@@ -206,7 +211,7 @@ namespace ZTn.Json.Editor.Forms
             jsonValueTextBox.ReadOnly = true;
         }
 
-        private void jsonTreeView_AfterSelect(JTokenTreeNode node, TreeViewEventArgs e)
+        private void JsonTreeView_AfterSelectImplementation(JTokenTreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
@@ -219,7 +224,7 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
-        private void jsonTreeView_AfterSelect(JValueTreeNode node, TreeViewEventArgs e)
+        private void JsonTreeView_AfterSelectImplementation(JValueTreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
