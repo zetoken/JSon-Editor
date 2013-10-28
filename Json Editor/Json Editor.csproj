@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\JTokenTreeNodeDeleteException.cs" />
+    <Compile Include="Extensions\JTokenTreeNodePasteException.cs" />
     <Compile Include="Forms\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +92,7 @@
     </Compile>
     <Compile Include="Linq\ForEachExtension.cs" />
     <Compile Include="Linq\JPropertyEqualityComparer.cs" />
+    <Compile Include="Extensions\JTokenTreeNodeActions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Generic\SingleInstanceProvider.cs" />

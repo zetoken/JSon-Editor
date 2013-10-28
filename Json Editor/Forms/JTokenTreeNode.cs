@@ -13,7 +13,7 @@ namespace ZTn.Json.Editor.Forms
     /// <summary>
     /// Specialized <see cref="TreeNode"/> for handling <see cref="JToken"/> representation in a <see cref="TreeView"/>.
     /// </summary>
-    abstract class JTokenTreeNode : TreeNode, IJsonTreeNode
+    public abstract class JTokenTreeNode : TreeNode, IJsonTreeNode
     {
         #region >> Properties
 
