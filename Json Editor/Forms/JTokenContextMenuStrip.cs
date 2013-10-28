@@ -246,11 +246,12 @@ namespace ZTn.Json.Editor.Forms
                     return;
                 }
 
-                node.TreeView.BeginUpdate();
+                TreeView treeView = node.TreeView;
+                treeView.BeginUpdate();
 
                 node.CleanParentTreeNode();
 
-                node.TreeView.EndUpdate();
+                treeView.EndUpdate();
             }
         }
 
