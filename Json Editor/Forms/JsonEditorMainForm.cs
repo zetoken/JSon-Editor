@@ -32,6 +32,16 @@ namespace ZTn.Json.Editor.Forms
 
             jsonTreeView.AfterCollapse += jsonTreeView_AfterCollapse;
             jsonTreeView.AfterExpand += jsonTreeView_AfterExpand;
+
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            if (commandLineArgs.Skip(1).Any())
+            {
+                using (var stream = new FileStream(commandLineArgs[1], FileMode.Open))
+                {
+                    SetJsonSourceStream(stream, commandLineArgs[1]);
+                }
+
+            }
         }
 
         #endregion
@@ -68,23 +78,9 @@ namespace ZTn.Json.Editor.Forms
             {
                 using (var stream = openFileDialog.OpenFile())
                 {
-                    if (stream != null)
-                    {
-                        jsonEditorItem = new JTokenRoot(stream);
-                    }
-                    else
-                    {
-                        jsonEditorItem = new JTokenRoot("{}");
-                    }
+                    SetJsonSourceStream(stream, openFileDialog.FileName);
                 }
 
-                jsonTreeView.Nodes.Clear();
-                jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
-                jsonTreeView.Nodes
-                    .Cast<TreeNode>()
-                    .ForEach(n => n.Expand());
-
-                jsonTreeTabPage.Text = openFileDialog.FileName;
             }
         }
 
@@ -242,5 +238,27 @@ namespace ZTn.Json.Editor.Forms
         }
 
         #endregion
+
+        private void SetJsonSourceStream(Stream stream, string fileName)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+            if (fileName == null)
+            {
+                fileName = "UnKnown.json";
+            }
+
+            jsonEditorItem = new JTokenRoot(stream);
+
+            jsonTreeView.Nodes.Clear();
+            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes
+                .Cast<TreeNode>()
+                .ForEach(n => n.Expand());
+
+            jsonTreeTabPage.Text = fileName;
+        }
     }
 }

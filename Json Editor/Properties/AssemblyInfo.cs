@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Json Editor by ZTn")]
 [assembly: AssemblyDescription("Simple JSON Editor based on Newtonsoft.Json library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ZeToken.net")]
+[assembly: AssemblyCompany("BeSecure / ZeToken.net")]
 [assembly: AssemblyProduct("Json Editor by ZTn")]
-[assembly: AssemblyCopyright("Copyright © ZeToken.net 2013")]
+[assembly: AssemblyCopyright("BeSecure / ZeToken.net 2013 (MIT License)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0")]
+[assembly: AssemblyVersion("1.1.0.*")]
 [assembly: AssemblyFileVersion("1.1.0.0")]
