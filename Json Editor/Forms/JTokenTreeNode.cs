@@ -34,6 +34,7 @@ namespace ZTn.Json.Editor.Forms
         {
             Tag = jToken;
             ContextMenuStrip = SingleInstanceProvider<JTokenContextMenuStrip>.Value;
+
             AfterCollapse();
         }
 

@@ -20,6 +20,10 @@ namespace ZTn.Json.Editor.Forms
 
         JTokenRoot jsonEditorItem;
 
+        TreeNode lastDragDropTarget;
+        DateTime lastDragDropDateTime;
+        Color lastDragDropBackColor;
+
         #endregion
 
         #region >> Constructor
@@ -238,6 +242,67 @@ namespace ZTn.Json.Editor.Forms
         }
 
         #endregion
+
+        private void jsonTreeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DoDragDrop(e.Item, DragDropEffects.Copy | DragDropEffects.Move);
+        }
+
+        private void jsonTreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+        }
+
+        private void jsonTreeView_DragDrop(object sender, DragEventArgs e)
+        {
+            lastDragDropTarget.BackColor = lastDragDropBackColor;
+            lastDragDropTarget = null;
+
+            JTokenTreeNode node = e.Data.GetData(e.Data.GetFormats().FirstOrDefault(), true) as JTokenTreeNode;
+
+            if (node != null)
+            {
+                MessageBox.Show("Drag & Drop Ready");
+            }
+        }
+
+        private void jsonTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            Point targetPoint = jsonTreeView.PointToClient(new Point(e.X, e.Y));
+
+            TreeNode targetNode = jsonTreeView.GetNodeAt(targetPoint);
+
+            if (targetNode != null)
+            {
+                if (targetNode != lastDragDropTarget)
+                {
+                    if (lastDragDropTarget != null)
+                    {
+                        lastDragDropTarget.BackColor = lastDragDropBackColor;
+                    }
+                    lastDragDropTarget = targetNode;
+                    lastDragDropBackColor = targetNode.BackColor;
+                    lastDragDropDateTime = DateTime.Now;
+
+                    targetNode.BackColor = Color.BlueViolet;
+                }
+                else
+                {
+                    if (DateTime.Now - lastDragDropDateTime >= new TimeSpan(5000000))
+                    {
+                        targetNode.Expand();
+                    }
+                }
+            }
+            else
+            {
+                if (lastDragDropTarget != null)
+                {
+                    lastDragDropTarget.BackColor = lastDragDropBackColor;
+                }
+                lastDragDropTarget = null;
+            }
+        }
 
         private void SetJsonSourceStream(Stream stream, string fileName)
         {

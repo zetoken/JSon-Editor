@@ -36,18 +36,18 @@
             this.newJsonArrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutJsonEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jsonDataTabControl = new System.Windows.Forms.TabControl();
             this.jsonTreeTabPage = new System.Windows.Forms.TabPage();
             this.jsonTreeViewSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.jsonTreeView = new System.Windows.Forms.TreeView();
             this.jsonTypeComboBox = new System.Windows.Forms.ComboBox();
             this.jsonValueTextBox = new System.Windows.Forms.TextBox();
             this.jsonValueLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.newtonsoftJsonTypeTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutJsonEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jsonTreeView = new ZTn.Json.Editor.Forms.TreeViewWithoutTooltips();
             this.formMenuStrip.SuspendLayout();
             this.jsonDataTabControl.SuspendLayout();
             this.jsonTreeTabPage.SuspendLayout();
@@ -115,6 +115,21 @@
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutJsonEditorToolStripMenuItem});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(24, 20);
+            this.aboutToolStripMenuItem.Text = "?";
+            // 
+            // aboutJsonEditorToolStripMenuItem
+            // 
+            this.aboutJsonEditorToolStripMenuItem.Name = "aboutJsonEditorToolStripMenuItem";
+            this.aboutJsonEditorToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.aboutJsonEditorToolStripMenuItem.Text = "About Json Editor";
+            this.aboutJsonEditorToolStripMenuItem.Click += new System.EventHandler(this.aboutJsonEditorToolStripMenuItem_Click);
+            // 
             // jsonDataTabControl
             // 
             this.jsonDataTabControl.Controls.Add(this.jsonTreeTabPage);
@@ -163,18 +178,6 @@
             this.jsonTreeViewSplitContainer.SplitterDistance = 667;
             this.jsonTreeViewSplitContainer.TabIndex = 8;
             // 
-            // jsonTreeView
-            // 
-            this.jsonTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.jsonTreeView.Location = new System.Drawing.Point(0, 0);
-            this.jsonTreeView.Name = "jsonTreeView";
-            this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
-            this.jsonTreeView.TabIndex = 0;
-            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
-            this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
-            // 
             // jsonTypeComboBox
             // 
             this.jsonTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -195,7 +198,7 @@
             this.jsonValueTextBox.Multiline = true;
             this.jsonValueTextBox.Name = "jsonValueTextBox";
             this.jsonValueTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.jsonValueTextBox.Size = new System.Drawing.Size(320, 448);
+            this.jsonValueTextBox.Size = new System.Drawing.Size(320, 424);
             this.jsonValueTextBox.TabIndex = 6;
             this.jsonValueTextBox.Enter += new System.EventHandler(this.jsonValueTextBox_Enter);
             this.jsonValueTextBox.Leave += new System.EventHandler(this.jsonValueTextBox_Leave);
@@ -238,20 +241,23 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "JSON Type";
             // 
-            // aboutToolStripMenuItem
+            // jsonTreeView
             // 
-            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutJsonEditorToolStripMenuItem});
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(24, 20);
-            this.aboutToolStripMenuItem.Text = "?";
-            // 
-            // aboutJsonEditorToolStripMenuItem
-            // 
-            this.aboutJsonEditorToolStripMenuItem.Name = "aboutJsonEditorToolStripMenuItem";
-            this.aboutJsonEditorToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.aboutJsonEditorToolStripMenuItem.Text = "About Json Editor";
-            this.aboutJsonEditorToolStripMenuItem.Click += new System.EventHandler(this.aboutJsonEditorToolStripMenuItem_Click);
+            this.jsonTreeView.AllowDrop = true;
+            this.jsonTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.jsonTreeView.HideSelection = false;
+            this.jsonTreeView.Location = new System.Drawing.Point(0, 0);
+            this.jsonTreeView.Name = "jsonTreeView";
+            this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
+            this.jsonTreeView.TabIndex = 0;
+            this.jsonTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.jsonTreeView_ItemDrag);
+            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
+            this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
+            this.jsonTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragDrop);
+            this.jsonTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragEnter);
+            this.jsonTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragOver);
             // 
             // JsonEditorMainForm
             // 
@@ -295,10 +301,10 @@
         private System.Windows.Forms.ToolStripMenuItem newJsonObjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newJsonArrayToolStripMenuItem;
         private System.Windows.Forms.ComboBox jsonTypeComboBox;
-        public System.Windows.Forms.TreeView jsonTreeView;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutJsonEditorToolStripMenuItem;
+        public TreeViewWithoutTooltips jsonTreeView;
     }
 }
 
