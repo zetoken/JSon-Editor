@@ -47,7 +47,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.newtonsoftJsonTypeTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.jsonTreeView = new ZTn.Json.Editor.Forms.TreeViewWithoutTooltips();
+            this.jsonTreeView = new ZTn.Json.Editor.Forms.JTokenTreeView();
             this.formMenuStrip.SuspendLayout();
             this.jsonDataTabControl.SuspendLayout();
             this.jsonTreeTabPage.SuspendLayout();
@@ -252,12 +252,8 @@
             this.jsonTreeView.Name = "jsonTreeView";
             this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
             this.jsonTreeView.TabIndex = 0;
-            this.jsonTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.jsonTreeView_ItemDrag);
             this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
             this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
-            this.jsonTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragDrop);
-            this.jsonTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragEnter);
-            this.jsonTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.jsonTreeView_DragOver);
             // 
             // JsonEditorMainForm
             // 
@@ -304,7 +300,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutJsonEditorToolStripMenuItem;
-        public TreeViewWithoutTooltips jsonTreeView;
+        public JTokenTreeView jsonTreeView;
     }
 }
 

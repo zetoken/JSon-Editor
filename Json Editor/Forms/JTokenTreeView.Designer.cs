@@ -1,6 +1,6 @@
 ﻿namespace ZTn.Json.Editor.Forms
 {
-    partial class TreeViewWithoutTooltips
+    partial class JTokenTreeView
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.

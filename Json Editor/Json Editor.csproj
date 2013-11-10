@@ -84,11 +84,11 @@
     <Compile Include="Forms\JObjectTreeNode.cs" />
     <Compile Include="Forms\JPropertyTreeNode.cs" />
     <Compile Include="Forms\JTokenTreeNode.cs" />
-    <Compile Include="Forms\TreeViewWithoutTooltips.cs">
+    <Compile Include="Forms\JTokenTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\TreeViewWithoutTooltips.Designer.cs">
-      <DependentUpon>TreeViewWithoutTooltips.cs</DependentUpon>
+    <Compile Include="Forms\JTokenTreeView.Designer.cs">
+      <DependentUpon>JTokenTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
     <Compile Include="Generic\EditorClipboard.cs" />
