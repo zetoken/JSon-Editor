@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Generic;
 
@@ -16,7 +11,7 @@ namespace ZTn.Json.Editor.Forms
     {
         #region >> Properties
 
-        public JValue jValueTag
+        public JValue JValueTag
         {
             get { return Tag as JValue; }
         }

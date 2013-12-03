@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
 using ZTn.Json.Editor.Forms;
 using ZTn.Json.Editor.Generic;
 
@@ -75,7 +71,7 @@ namespace ZTn.Json.Editor.Extensions
         /// </summary>
         /// <param name="node"></param>
         /// <param name="pasteJTokenImplementation">Implementation of paste action in the JToken tree.</param>
-        /// <param name="pasteJTokenImplementation">Implementation of paste action in the treeView.</param>
+        /// <param name="pasteTreeNodeImplementation">Implementation of paste action in the treeView.</param>
         private static void ClipboardPaste(this JTokenTreeNode node, Action<JToken> pasteJTokenImplementation, Action<TreeNode> pasteTreeNodeImplementation)
         {
             JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
@@ -114,7 +110,6 @@ namespace ZTn.Json.Editor.Extensions
         /// <summary>
         /// Implementation of "delete" action.
         /// </summary>
-        /// <param name="jTokenTreeNode"></param>
         /// <param name="node"></param>
         public static void EditDelete(this JTokenTreeNode node)
         {

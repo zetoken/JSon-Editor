@@ -1,53 +1,49 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Properties;
 
 namespace ZTn.Json.Editor.Forms
 {
-    sealed class JObjectContextMenuStrip : JTokenContextMenuStrip
+    class JObjectContextMenuStrip : JTokenContextMenuStrip
     {
-        ToolStripMenuItem objectToolStripItem;
-        ToolStripMenuItem insertPropertyToolStripItem;
+        protected ToolStripMenuItem ObjectToolStripItem;
+        protected ToolStripMenuItem InsertPropertyToolStripItem;
 
         #region >> Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JObjectContextMenuStrip"/> class.
         /// </summary>
-        public JObjectContextMenuStrip() :
-            base()
+        public JObjectContextMenuStrip()
         {
-            objectToolStripItem = new ToolStripMenuItem("Json Object");
-            insertPropertyToolStripItem = new ToolStripMenuItem("Insert Property", null, InsertProperty_Click);
+            ObjectToolStripItem = new ToolStripMenuItem(Resources.JsonObject);
+            InsertPropertyToolStripItem = new ToolStripMenuItem(Resources.InsertProperty, null, InsertProperty_Click);
 
-            objectToolStripItem.DropDownItems.Add(insertPropertyToolStripItem);
-            Items.Add(objectToolStripItem);
+            ObjectToolStripItem.DropDownItems.Add(InsertPropertyToolStripItem);
+            Items.Add(ObjectToolStripItem);
         }
 
         #endregion
 
         /// <summary>
-        /// Click event handler for <see cref="insertPropertyToolStripItem"/>.
+        /// Click event handler for <see cref="InsertPropertyToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void InsertProperty_Click(Object sender, EventArgs e)
         {
-            JObjectTreeNode jObjectTreeNode = jTokenTreeNode as JObjectTreeNode;
+            var jObjectTreeNode = JTokenNode as JObjectTreeNode;
 
             if (jObjectTreeNode == null)
             {
                 return;
             }
 
-            JProperty newJProperty = new JProperty("name" + DateTime.Now.Ticks, "v");
+            var newJProperty = new JProperty("name" + DateTime.Now.Ticks, "v");
             jObjectTreeNode.JObjectTag.AddFirst(newJProperty);
 
-            JPropertyTreeNode jPropertyTreeNode = (JPropertyTreeNode)JsonTreeNodeFactory.Create(newJProperty);
+            var jPropertyTreeNode = (JPropertyTreeNode)JsonTreeNodeFactory.Create(newJProperty);
             jObjectTreeNode.Nodes.Insert(0, jPropertyTreeNode);
 
             jObjectTreeNode.TreeView.SelectedNode = jPropertyTreeNode;

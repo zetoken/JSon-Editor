@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -29,7 +24,6 @@ namespace ZTn.Json.Editor.Forms
         /// Default constructor
         /// </summary>
         public JTokenTreeView()
-            : base()
         {
             InitializeComponent();
 
@@ -83,19 +77,19 @@ namespace ZTn.Json.Editor.Forms
                 lastDragDropTarget = null;
             }
 
-            JTokenTreeNode node = e.Data.GetData(e.Data.GetFormats().FirstOrDefault(), true) as JTokenTreeNode;
+            var node = e.Data.GetData(e.Data.GetFormats().FirstOrDefault(), true) as JTokenTreeNode;
 
             if (node != null)
             {
-                MessageBox.Show("Drag & Drop Ready");
+                MessageBox.Show(@"Drag & Drop Ready");
             }
         }
 
         private void DragOverHandler(object sender, DragEventArgs e)
         {
-            Point targetPoint = this.PointToClient(new Point(e.X, e.Y));
+            Point targetPoint = PointToClient(new Point(e.X, e.Y));
 
-            JTokenTreeNode targetNode = this.GetNodeAt(targetPoint) as JTokenTreeNode;
+            var targetNode = GetNodeAt(targetPoint) as JTokenTreeNode;
 
             if (targetNode != null)
             {
@@ -164,13 +158,9 @@ namespace ZTn.Json.Editor.Forms
             {
                 return (node.JTokenTag is JObject);
             }
-            else if (dragDropSource.JTokenTag is JObject)
+            if (dragDropSource.JTokenTag is JObject)
             {
                 return node.JTokenTag is JProperty || node.JTokenTag is JArray;
-            }
-            else if (dragDropSource.JTokenTag is JObject)
-            {
-                return node.JTokenTag is JArray;
             }
 
             return false;

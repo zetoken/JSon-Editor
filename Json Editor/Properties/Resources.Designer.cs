@@ -59,5 +59,167 @@ namespace ZTn.Json.Editor.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Collapse All.
+        /// </summary>
+        internal static string CollapseAll {
+            get {
+                return ResourceManager.GetString("CollapseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Copy.
+        /// </summary>
+        internal static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cut.
+        /// </summary>
+        internal static string Cut {
+            get {
+                return ResourceManager.GetString("Cut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Delete Node.
+        /// </summary>
+        internal static string DeleteNode {
+            get {
+                return ResourceManager.GetString("DeleteNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Deletion action failed.
+        /// </summary>
+        internal static string DeletionActionFailed {
+            get {
+                return ResourceManager.GetString("DeletionActionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Edit.
+        /// </summary>
+        internal static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Expand All.
+        /// </summary>
+        internal static string ExpandAll {
+            get {
+                return ResourceManager.GetString("ExpandAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Insert Array.
+        /// </summary>
+        internal static string InsertArray {
+            get {
+                return ResourceManager.GetString("InsertArray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Insert Object.
+        /// </summary>
+        internal static string InsertObject {
+            get {
+                return ResourceManager.GetString("InsertObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Insert Property.
+        /// </summary>
+        internal static string InsertProperty {
+            get {
+                return ResourceManager.GetString("InsertProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Insert Value.
+        /// </summary>
+        internal static string InsertValue {
+            get {
+                return ResourceManager.GetString("InsertValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Json Array.
+        /// </summary>
+        internal static string JsonArray {
+            get {
+                return ResourceManager.GetString("JsonArray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Json Object.
+        /// </summary>
+        internal static string JsonObject {
+            get {
+                return ResourceManager.GetString("JsonObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à New Json Object.
+        /// </summary>
+        internal static string NewJsonObject {
+            get {
+                return ResourceManager.GetString("NewJsonObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Paste action failed.
+        /// </summary>
+        internal static string PasteActionFailed {
+            get {
+                return ResourceManager.GetString("PasteActionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Paste Node After.
+        /// </summary>
+        internal static string PasteNodeAfter {
+            get {
+                return ResourceManager.GetString("PasteNodeAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Paste Node Before.
+        /// </summary>
+        internal static string PasteNodeBefore {
+            get {
+                return ResourceManager.GetString("PasteNodeBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Replace.
+        /// </summary>
+        internal static string Replace {
+            get {
+                return ResourceManager.GetString("Replace", resourceCulture);
+            }
+        }
     }
 }

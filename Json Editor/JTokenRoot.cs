@@ -1,13 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ZTn.Json.Editor.Forms;
 
 namespace ZTn.Json.Editor
 {
@@ -55,7 +47,7 @@ namespace ZTn.Json.Editor
         /// <summary>
         /// Constructor using an existing json string to populate the instance.
         /// </summary>
-        /// <param name="jsonString">Source string.</param>
+        /// <param name="jToken">Source <see cref="JToken"/>.</param>
         public JTokenRoot(JToken jToken)
         {
             Load(jToken);
@@ -87,7 +79,7 @@ namespace ZTn.Json.Editor
         /// <summary>
         /// Initialize using an existing json string to populate the instance.
         /// </summary>
-        /// <param name="jsonString">Source string.</param>
+        /// <param name="jToken">Source <see cref="JToken"/>.</param>
         public void Load(JToken jToken)
         {
             jTokenValue = jToken;

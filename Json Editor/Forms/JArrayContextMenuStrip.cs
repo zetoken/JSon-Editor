@@ -1,40 +1,36 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Properties;
 
 namespace ZTn.Json.Editor.Forms
 {
     class JArrayContextMenuStrip : JTokenContextMenuStrip
     {
-        ToolStripMenuItem arrayToolStripItem;
-        ToolStripMenuItem insertArrayToolStripItem;
-        ToolStripMenuItem insertObjectToolStripItem;
-        ToolStripMenuItem insertValueToolStripItem;
+        protected ToolStripMenuItem ArrayToolStripItem;
+        protected ToolStripMenuItem InsertArrayToolStripItem;
+        protected ToolStripMenuItem InsertObjectToolStripItem;
+        protected ToolStripMenuItem InsertValueToolStripItem;
 
         #region >> Constructors
 
         public JArrayContextMenuStrip()
-            : base()
         {
-            arrayToolStripItem = new ToolStripMenuItem("Json Array");
-            insertArrayToolStripItem = new ToolStripMenuItem("Insert Array", null, InsertArray_Click);
-            insertObjectToolStripItem = new ToolStripMenuItem("Insert Object", null, InsertObject_Click);
-            insertValueToolStripItem = new ToolStripMenuItem("Insert Value", null, InsertValue_Click);
+            ArrayToolStripItem = new ToolStripMenuItem(Resources.JsonArray);
+            InsertArrayToolStripItem = new ToolStripMenuItem(Resources.InsertArray, null, InsertArray_Click);
+            InsertObjectToolStripItem = new ToolStripMenuItem(Resources.InsertObject, null, InsertObject_Click);
+            InsertValueToolStripItem = new ToolStripMenuItem(Resources.InsertValue, null, InsertValue_Click);
 
-            arrayToolStripItem.DropDownItems.Add(insertArrayToolStripItem);
-            arrayToolStripItem.DropDownItems.Add(insertObjectToolStripItem);
-            arrayToolStripItem.DropDownItems.Add(insertValueToolStripItem);
-            Items.Add(arrayToolStripItem);
+            ArrayToolStripItem.DropDownItems.Add(InsertArrayToolStripItem);
+            ArrayToolStripItem.DropDownItems.Add(InsertObjectToolStripItem);
+            ArrayToolStripItem.DropDownItems.Add(InsertValueToolStripItem);
+            Items.Add(ArrayToolStripItem);
         }
 
         #endregion
 
         /// <summary>
-        /// Click event handler for <see cref="insertValueToolStripItem"/>.
+        /// Click event handler for <see cref="InsertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -44,7 +40,7 @@ namespace ZTn.Json.Editor.Forms
         }
 
         /// <summary>
-        /// Click event handler for <see cref="insertValueToolStripItem"/>.
+        /// Click event handler for <see cref="InsertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -54,13 +50,13 @@ namespace ZTn.Json.Editor.Forms
         }
 
         /// <summary>
-        /// Click event handler for <see cref="insertValueToolStripItem"/>.
+        /// Click event handler for <see cref="InsertValueToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void InsertValue_Click(Object sender, EventArgs e)
         {
-            InsertJToken(JValue.Parse("null"));
+            InsertJToken(JToken.Parse("null"));
         }
 
         /// <summary>
@@ -69,14 +65,14 @@ namespace ZTn.Json.Editor.Forms
         /// <param name="newJToken"></param>
         private void InsertJToken(JToken newJToken)
         {
-            JArrayTreeNode jArrayTreeNode = jTokenTreeNode as JArrayTreeNode;
+            var jArrayTreeNode = JTokenNode as JArrayTreeNode;
 
             if (jArrayTreeNode == null)
             {
                 return;
             }
 
-            jArrayTreeNode.jArrayTag.AddFirst(newJToken);
+            jArrayTreeNode.JArrayTag.AddFirst(newJToken);
 
             TreeNode newTreeNode = JsonTreeNodeFactory.Create(newJToken);
             jArrayTreeNode.Nodes.Insert(0, newTreeNode);

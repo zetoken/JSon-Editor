@@ -1,6 +1,6 @@
 ﻿namespace ZTn.Json.Editor.Forms
 {
-    partial class AboutBox
+    sealed partial class AboutBox
     {
         /// <summary>
         /// Variable nécessaire au concepteur.

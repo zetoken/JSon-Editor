@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Generic;
 
@@ -16,7 +11,7 @@ namespace ZTn.Json.Editor.Forms
     {
         #region >> Properties
 
-        public JArray jArrayTag
+        public JArray JArrayTag
         {
             get { return Tag as JArray; }
         }
@@ -41,13 +36,13 @@ namespace ZTn.Json.Editor.Forms
         /// <inheritdoc />
         public override void AfterCollapse()
         {
-            Text = "[" + jArrayTag.Type + "] " + Tag;
+            Text = "[" + JArrayTag.Type + "] " + Tag;
         }
 
         /// <inheritdoc />
         public override void AfterExpand()
         {
-            Text = "[" + jArrayTag.Type + "]";
+            Text = "[" + JArrayTag.Type + "]";
         }
 
         #endregion

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZTn.Json.Editor.Linq
 {
@@ -16,7 +13,7 @@ namespace ZTn.Json.Editor.Linq
         /// <param name="action"></param>
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
-            foreach (TSource element in source)
+            foreach (var element in source)
             {
                 action(element);
             }

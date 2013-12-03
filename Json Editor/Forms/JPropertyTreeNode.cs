@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Generic;
 using ZTn.Json.Editor.Linq;
@@ -44,9 +41,9 @@ namespace ZTn.Json.Editor.Forms
         public override void AfterCollapse()
         {
             base.AfterCollapse();
-            if (this.TreeView != null)
+            if (TreeView != null)
             {
-                NodeFont = this.TreeView.Font;
+                NodeFont = TreeView.Font;
             }
         }
 
@@ -54,9 +51,9 @@ namespace ZTn.Json.Editor.Forms
         public override void AfterExpand()
         {
             Text = JPropertyTag.Name;
-            if (this.TreeView != null)
+            if (TreeView != null)
             {
-                NodeFont = new Font(this.TreeView.Font, FontStyle.Underline);
+                NodeFont = new Font(TreeView.Font, FontStyle.Underline);
             }
         }
 
@@ -82,21 +79,21 @@ namespace ZTn.Json.Editor.Forms
             // Extract the contained JProperties as the JObject was only a container
             // As Json.NET internally clones JToken instances having Parent!=null when inserting in a JContainer,
             // explicitly clones the new JProperties to nullify Parent and to know of the instances
-            List<JProperty> jParsedProperties = ((JObject)jTokenRoot.JTokenValue).Properties()
+            var jParsedProperties = ((JObject)jTokenRoot.JTokenValue).Properties()
                 .Select(p => new JProperty(p))
                 .ToList();
 
             // Update the properties of parent JObject by inserting jParsedProperties and removing edited JProperty
-            JObject jObjectParent = (JObject)JPropertyTag.Parent;
+            var jObjectParent = (JObject)JPropertyTag.Parent;
 
-            List<JProperty> jProperties = jObjectParent.Properties()
-                .SelectMany(p => Object.ReferenceEquals(p, JPropertyTag) ? jParsedProperties : new List<JProperty>() { p })
-                .Distinct(new Editor.Linq.JPropertyEqualityComparer())
+            var jProperties = jObjectParent.Properties()
+                .SelectMany(p => ReferenceEquals(p, JPropertyTag) ? jParsedProperties : new List<JProperty> { p })
+                .Distinct(new JPropertyEqualityComparer())
                 .ToList();
             jObjectParent.ReplaceAll(jProperties);
 
             // Build a new list of TreeNodes for these JProperties
-            List<JPropertyTreeNode> jParsedTreeNodes = jParsedProperties
+            var jParsedTreeNodes = jParsedProperties
                 .Select(p => JsonTreeNodeFactory.Create(p))
                 .Cast<JPropertyTreeNode>()
                 .ToList();
@@ -107,9 +104,9 @@ namespace ZTn.Json.Editor.Forms
         #endregion
 
         /// <summary>
-        /// Insert or replace a set of <paramref name="JPropertyTreeNode"/>s in current parent nodes.
+        /// Insert or replace a set of <paramref name="newNodes"/>s in current parent nodes.
         /// </summary>
-        /// <param name="newNode"></param>
+        /// <param name="newNodes"></param>
         /// <returns></returns>
         public TreeNode UpdateTreeNodes(IEnumerable<JPropertyTreeNode> newNodes)
         {
@@ -123,7 +120,7 @@ namespace ZTn.Json.Editor.Forms
                 treeNodeCollection = TreeView.Nodes;
             }
 
-            int nodeIndex = treeNodeCollection.IndexOf(this);
+            var nodeIndex = treeNodeCollection.IndexOf(this);
 
             newNodes.ForEach(n => treeNodeCollection.Insert(nodeIndex++, n));
 

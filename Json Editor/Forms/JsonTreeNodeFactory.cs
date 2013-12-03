@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ZTn.Json.Editor.Forms
@@ -52,10 +48,11 @@ namespace ZTn.Json.Editor.Forms
         /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JArray"/> instance.
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="depth"></param>
         /// <returns></returns>
         public static TreeNode Create(JArray obj, int depth)
         {
-            var node = new Forms.JArrayTreeNode(obj);
+            var node = new JArrayTreeNode(obj);
 
             if (depth != 1)
             {
@@ -74,10 +71,11 @@ namespace ZTn.Json.Editor.Forms
         /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JObject"/> instance.
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="depth"></param>
         /// <returns></returns>
         public static TreeNode Create(JObject obj, int depth)
         {
-            var node = new Forms.JObjectTreeNode(obj);
+            var node = new JObjectTreeNode(obj);
 
             if (depth != 1)
             {
@@ -95,10 +93,11 @@ namespace ZTn.Json.Editor.Forms
         /// Create a TreeNode and its subtrees for the <paramref name="obj"/> instance beeing a <see cref="JProperty"/> instance.
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="depth"></param>
         /// <returns></returns>
         public static TreeNode Create(JProperty obj, int depth)
         {
-            var node = new Forms.JPropertyTreeNode(obj);
+            var node = new JPropertyTreeNode(obj);
 
             if (depth != 1)
             {
@@ -118,6 +117,7 @@ namespace ZTn.Json.Editor.Forms
         /// This method exists only for safety in case of a new concrete <see cref="JToken"/> instance is implemented in the future.
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="depth"></param>
         /// <returns></returns>
         /// <exception cref="UnattendedJTokenTypeException">Always thrown.</exception>
         private static TreeNode Create(JToken obj, int depth)
@@ -133,7 +133,7 @@ namespace ZTn.Json.Editor.Forms
         /// <returns></returns>
         public static TreeNode Create(JValue obj, int depth)
         {
-            var node = new Forms.JValueTreeNode(obj);
+            var node = new JValueTreeNode(obj);
 
             return node;
         }

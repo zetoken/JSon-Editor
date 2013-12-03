@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Generic;
-using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -30,7 +26,7 @@ namespace ZTn.Json.Editor.Forms
         /// Initializes a new instance of the <see cref="JTokenTreeNode"/> class.
         /// </summary>
         /// <param name="jToken"></param>
-        public JTokenTreeNode(JToken jToken)
+        protected JTokenTreeNode(JToken jToken)
         {
             Tag = jToken;
             ContextMenuStrip = SingleInstanceProvider<JTokenContextMenuStrip>.Value;
@@ -117,7 +113,7 @@ namespace ZTn.Json.Editor.Forms
         }
 
         /// <summary>
-        /// Insert or replace a <paramref name="TreeNode"/> in current parent nodes.
+        /// Insert or replace a <paramref name="newNode"/> in current parent nodes.
         /// </summary>
         /// <param name="newNode"></param>
         /// <returns></returns>
@@ -127,7 +123,7 @@ namespace ZTn.Json.Editor.Forms
         }
 
         /// <summary>
-        /// Insert or replace a <paramref name="TreeNode"/> in current parent nodes.
+        /// Insert or replace a <paramref name="newNode"/> in current parent nodes.
         /// </summary>
         /// <param name="newNode"></param>
         /// <param name="insertBefore">

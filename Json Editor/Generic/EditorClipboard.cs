@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZTn.Json.Editor.Forms;
-
+﻿
 namespace ZTn.Json.Editor.Generic
 {
     /// <summary>
@@ -13,10 +7,12 @@ namespace ZTn.Json.Editor.Generic
     /// <typeparam name="T"></typeparam>
     class EditorClipboard<T> where T : class
     {
+        static readonly EditorClipboard<T> Clipboard = new EditorClipboard<T>();
+
         #region >> Fields
 
-        static T data = null;
-        static bool persistentState = true;
+        T storedData;
+        bool persistentState = true;
 
         #endregion
 
@@ -25,8 +21,8 @@ namespace ZTn.Json.Editor.Generic
         /// </summary>
         public static void Clear()
         {
-            data = null;
-            persistentState = true;
+            Clipboard.storedData = null;
+            Clipboard.persistentState = true;
         }
 
         /// <summary>
@@ -36,16 +32,14 @@ namespace ZTn.Json.Editor.Generic
         /// <returns></returns>
         public static T Get()
         {
-            if (persistentState)
+            if (Clipboard.persistentState)
             {
-                return data;
+                return Clipboard.storedData;
             }
-            else
-            {
-                T source = data;
-                Clear();
-                return source;
-            }
+
+            T source = Clipboard.storedData;
+            Clear();
+            return source;
         }
 
         /// <summary>
@@ -54,7 +48,7 @@ namespace ZTn.Json.Editor.Generic
         /// <returns></returns>
         public static bool IsEmpty()
         {
-            return data == null;
+            return Clipboard.storedData == null;
         }
 
         /// <summary>
@@ -78,8 +72,8 @@ namespace ZTn.Json.Editor.Generic
         /// </param>
         public static void Set(T data, bool persistentState)
         {
-            EditorClipboard<T>.data = data;
-            EditorClipboard<T>.persistentState = persistentState;
+            Clipboard.storedData = data;
+            Clipboard.persistentState = persistentState;
         }
     }
 }

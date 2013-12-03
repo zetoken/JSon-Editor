@@ -1,15 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZTn.Json.Editor.Forms;
 using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor.Forms
@@ -33,7 +26,7 @@ namespace ZTn.Json.Editor.Forms
             jsonTreeView.AfterCollapse += jsonTreeView_AfterCollapse;
             jsonTreeView.AfterExpand += jsonTreeView_AfterExpand;
 
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            var commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Skip(1).Any())
             {
                 using (var stream = new FileStream(commandLineArgs[1], FileMode.Open))
@@ -67,7 +60,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog()
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "json files (*.json)|*.json",
                 FilterIndex = 1,
@@ -86,7 +79,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            var saveFileDialog = new SaveFileDialog
             {
                 Filter = "json files (*.json)|*.json",
                 FilterIndex = 1,
@@ -97,7 +90,7 @@ namespace ZTn.Json.Editor.Forms
             {
                 using (var stream = saveFileDialog.OpenFile())
                 {
-                    if (stream != null)
+                    if (!stream.CanWrite)
                     {
                         new JTokenRoot(((JTokenTreeNode)jsonTreeView.TopNode).JTokenTag).Save(stream);
                     }
@@ -144,7 +137,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void jsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
-            IJsonTreeNode node = e.Node as IJsonTreeNode;
+            var node = e.Node as IJsonTreeNode;
             if (node != null)
             {
                 node.AfterCollapse();
@@ -153,7 +146,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void jsonTreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
-            IJsonTreeNode node = e.Node as IJsonTreeNode;
+            var node = e.Node as IJsonTreeNode;
             if (node != null)
             {
                 node.AfterExpand();
@@ -162,7 +155,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
-            IJsonTreeNode node = jsonTreeView.SelectedNode as IJsonTreeNode;
+            var node = jsonTreeView.SelectedNode as IJsonTreeNode;
             if (node != null)
             {
                 jsonTreeView.BeginUpdate();
@@ -224,15 +217,15 @@ namespace ZTn.Json.Editor.Forms
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
-            jsonTypeComboBox.Text = node.jValueTag.Type.ToString();
+            jsonTypeComboBox.Text = node.JValueTag.Type.ToString();
 
-            switch (node.jValueTag.Type)
+            switch (node.JValueTag.Type)
             {
                 case JTokenType.String:
-                    jsonValueTextBox.Text = "\"" + node.jValueTag.ToString() + "\"";
+                    jsonValueTextBox.Text = "\"" + node.JValueTag + "\"";
                     break;
                 default:
-                    jsonValueTextBox.Text = node.jValueTag.ToString();
+                    jsonValueTextBox.Text = node.JValueTag.ToString();
                     break;
             }
         }

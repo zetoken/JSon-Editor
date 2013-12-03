@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JsonEditorMainForm));
+            this.jsonTreeViewSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.jsonTreeView = new ZTn.Json.Editor.Forms.JTokenTreeView();
+            this.jsonTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.jsonValueTextBox = new System.Windows.Forms.TextBox();
+            this.jsonValueLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.newtonsoftJsonTypeTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.formMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,22 +48,118 @@
             this.aboutJsonEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jsonDataTabControl = new System.Windows.Forms.TabControl();
             this.jsonTreeTabPage = new System.Windows.Forms.TabPage();
-            this.jsonTreeViewSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.jsonTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.jsonValueTextBox = new System.Windows.Forms.TextBox();
-            this.jsonValueLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.newtonsoftJsonTypeTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.jsonTreeView = new ZTn.Json.Editor.Forms.JTokenTreeView();
-            this.formMenuStrip.SuspendLayout();
-            this.jsonDataTabControl.SuspendLayout();
-            this.jsonTreeTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.jsonTreeViewSplitContainer)).BeginInit();
             this.jsonTreeViewSplitContainer.Panel1.SuspendLayout();
             this.jsonTreeViewSplitContainer.Panel2.SuspendLayout();
             this.jsonTreeViewSplitContainer.SuspendLayout();
+            this.formMenuStrip.SuspendLayout();
+            this.jsonDataTabControl.SuspendLayout();
+            this.jsonTreeTabPage.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // jsonTreeViewSplitContainer
+            // 
+            this.jsonTreeViewSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.jsonTreeViewSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.jsonTreeViewSplitContainer.Name = "jsonTreeViewSplitContainer";
+            // 
+            // jsonTreeViewSplitContainer.Panel1
+            // 
+            this.jsonTreeViewSplitContainer.Panel1.Controls.Add(this.jsonTreeView);
+            this.jsonTreeViewSplitContainer.Panel1MinSize = 200;
+            // 
+            // jsonTreeViewSplitContainer.Panel2
+            // 
+            this.jsonTreeViewSplitContainer.Panel2.BackColor = System.Drawing.Color.Transparent;
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonTypeComboBox);
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonValueTextBox);
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonValueLabel);
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.label2);
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.newtonsoftJsonTypeTextBox);
+            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.label1);
+            this.jsonTreeViewSplitContainer.Panel2MinSize = 320;
+            this.jsonTreeViewSplitContainer.Size = new System.Drawing.Size(1000, 551);
+            this.jsonTreeViewSplitContainer.SplitterDistance = 667;
+            this.jsonTreeViewSplitContainer.TabIndex = 8;
+            // 
+            // jsonTreeView
+            // 
+            this.jsonTreeView.AllowDrop = true;
+            this.jsonTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.jsonTreeView.HideSelection = false;
+            this.jsonTreeView.Location = new System.Drawing.Point(0, 0);
+            this.jsonTreeView.Name = "jsonTreeView";
+            this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
+            this.jsonTreeView.TabIndex = 0;
+            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
+            this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
+            // 
+            // jsonTypeComboBox
+            // 
+            this.jsonTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.jsonTypeComboBox.Enabled = false;
+            this.jsonTypeComboBox.FormattingEnabled = true;
+            this.jsonTypeComboBox.Location = new System.Drawing.Point(3, 59);
+            this.jsonTypeComboBox.Name = "jsonTypeComboBox";
+            this.jsonTypeComboBox.Size = new System.Drawing.Size(154, 21);
+            this.jsonTypeComboBox.TabIndex = 7;
+            // 
+            // jsonValueTextBox
+            // 
+            this.jsonValueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.jsonValueTextBox.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.jsonValueTextBox.Location = new System.Drawing.Point(3, 97);
+            this.jsonValueTextBox.Multiline = true;
+            this.jsonValueTextBox.Name = "jsonValueTextBox";
+            this.jsonValueTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.jsonValueTextBox.Size = new System.Drawing.Size(320, 424);
+            this.jsonValueTextBox.TabIndex = 6;
+            this.jsonValueTextBox.Enter += new System.EventHandler(this.jsonValueTextBox_Enter);
+            this.jsonValueTextBox.Leave += new System.EventHandler(this.jsonValueTextBox_Leave);
+            // 
+            // jsonValueLabel
+            // 
+            this.jsonValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.jsonValueLabel.AutoSize = true;
+            this.jsonValueLabel.Location = new System.Drawing.Point(3, 81);
+            this.jsonValueLabel.Name = "jsonValueLabel";
+            this.jsonValueLabel.Size = new System.Drawing.Size(65, 13);
+            this.jsonValueLabel.TabIndex = 5;
+            this.jsonValueLabel.Text = "JSON Value";
+            this.jsonValueLabel.TextChanged += new System.EventHandler(this.jsonValueTextBox_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(115, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "NewtonSoft.Json Type";
+            // 
+            // newtonsoftJsonTypeTextBox
+            // 
+            this.newtonsoftJsonTypeTextBox.Location = new System.Drawing.Point(3, 19);
+            this.newtonsoftJsonTypeTextBox.Name = "newtonsoftJsonTypeTextBox";
+            this.newtonsoftJsonTypeTextBox.ReadOnly = true;
+            this.newtonsoftJsonTypeTextBox.Size = new System.Drawing.Size(154, 20);
+            this.newtonsoftJsonTypeTextBox.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(62, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "JSON Type";
             // 
             // formMenuStrip
             // 
@@ -151,110 +255,6 @@
             this.jsonTreeTabPage.Text = "Json Tree View";
             this.jsonTreeTabPage.UseVisualStyleBackColor = true;
             // 
-            // jsonTreeViewSplitContainer
-            // 
-            this.jsonTreeViewSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.jsonTreeViewSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.jsonTreeViewSplitContainer.Name = "jsonTreeViewSplitContainer";
-            // 
-            // jsonTreeViewSplitContainer.Panel1
-            // 
-            this.jsonTreeViewSplitContainer.Panel1.Controls.Add(this.jsonTreeView);
-            this.jsonTreeViewSplitContainer.Panel1MinSize = 200;
-            // 
-            // jsonTreeViewSplitContainer.Panel2
-            // 
-            this.jsonTreeViewSplitContainer.Panel2.BackColor = System.Drawing.Color.Transparent;
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonTypeComboBox);
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonValueTextBox);
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.jsonValueLabel);
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.label2);
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.newtonsoftJsonTypeTextBox);
-            this.jsonTreeViewSplitContainer.Panel2.Controls.Add(this.label1);
-            this.jsonTreeViewSplitContainer.Panel2MinSize = 320;
-            this.jsonTreeViewSplitContainer.Size = new System.Drawing.Size(1000, 551);
-            this.jsonTreeViewSplitContainer.SplitterDistance = 667;
-            this.jsonTreeViewSplitContainer.TabIndex = 8;
-            // 
-            // jsonTypeComboBox
-            // 
-            this.jsonTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.jsonTypeComboBox.Enabled = false;
-            this.jsonTypeComboBox.FormattingEnabled = true;
-            this.jsonTypeComboBox.Location = new System.Drawing.Point(3, 59);
-            this.jsonTypeComboBox.Name = "jsonTypeComboBox";
-            this.jsonTypeComboBox.Size = new System.Drawing.Size(154, 21);
-            this.jsonTypeComboBox.TabIndex = 7;
-            // 
-            // jsonValueTextBox
-            // 
-            this.jsonValueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.jsonValueTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jsonValueTextBox.Location = new System.Drawing.Point(3, 97);
-            this.jsonValueTextBox.Multiline = true;
-            this.jsonValueTextBox.Name = "jsonValueTextBox";
-            this.jsonValueTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.jsonValueTextBox.Size = new System.Drawing.Size(320, 424);
-            this.jsonValueTextBox.TabIndex = 6;
-            this.jsonValueTextBox.Enter += new System.EventHandler(this.jsonValueTextBox_Enter);
-            this.jsonValueTextBox.Leave += new System.EventHandler(this.jsonValueTextBox_Leave);
-            // 
-            // jsonValueLabel
-            // 
-            this.jsonValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.jsonValueLabel.AutoSize = true;
-            this.jsonValueLabel.Location = new System.Drawing.Point(3, 81);
-            this.jsonValueLabel.Name = "jsonValueLabel";
-            this.jsonValueLabel.Size = new System.Drawing.Size(65, 13);
-            this.jsonValueLabel.TabIndex = 5;
-            this.jsonValueLabel.Text = "JSON Value";
-            this.jsonValueLabel.TextChanged += new System.EventHandler(this.jsonValueTextBox_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "NewtonSoft.Json Type";
-            // 
-            // newtonsoftJsonTypeTextBox
-            // 
-            this.newtonsoftJsonTypeTextBox.Location = new System.Drawing.Point(3, 19);
-            this.newtonsoftJsonTypeTextBox.Name = "newtonsoftJsonTypeTextBox";
-            this.newtonsoftJsonTypeTextBox.ReadOnly = true;
-            this.newtonsoftJsonTypeTextBox.Size = new System.Drawing.Size(154, 20);
-            this.newtonsoftJsonTypeTextBox.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "JSON Type";
-            // 
-            // jsonTreeView
-            // 
-            this.jsonTreeView.AllowDrop = true;
-            this.jsonTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.jsonTreeView.HideSelection = false;
-            this.jsonTreeView.Location = new System.Drawing.Point(0, 0);
-            this.jsonTreeView.Name = "jsonTreeView";
-            this.jsonTreeView.Size = new System.Drawing.Size(661, 545);
-            this.jsonTreeView.TabIndex = 0;
-            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
-            this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
-            // 
             // JsonEditorMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -266,15 +266,15 @@
             this.MainMenuStrip = this.formMenuStrip;
             this.Name = "JsonEditorMainForm";
             this.Text = "ZTn Json Editor";
-            this.formMenuStrip.ResumeLayout(false);
-            this.formMenuStrip.PerformLayout();
-            this.jsonDataTabControl.ResumeLayout(false);
-            this.jsonTreeTabPage.ResumeLayout(false);
             this.jsonTreeViewSplitContainer.Panel1.ResumeLayout(false);
             this.jsonTreeViewSplitContainer.Panel2.ResumeLayout(false);
             this.jsonTreeViewSplitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.jsonTreeViewSplitContainer)).EndInit();
             this.jsonTreeViewSplitContainer.ResumeLayout(false);
+            this.formMenuStrip.ResumeLayout(false);
+            this.formMenuStrip.PerformLayout();
+            this.jsonDataTabControl.ResumeLayout(false);
+            this.jsonTreeTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

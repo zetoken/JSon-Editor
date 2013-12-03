@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZTn.Json.Editor.Generic;
 using ZTn.Json.Editor.Extensions;
+using ZTn.Json.Editor.Generic;
+using ZTn.Json.Editor.Properties;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -15,19 +12,19 @@ namespace ZTn.Json.Editor.Forms
         /// <summary>
         /// Source <see cref="TreeNode"/> at the origin of this <see cref="ContextMenuStrip"/>
         /// </summary>
-        protected JTokenTreeNode jTokenTreeNode;
+        protected JTokenTreeNode JTokenNode;
 
-        protected ToolStripItem collapseAllToolStripItem;
-        protected ToolStripItem expandAllToolStripItem;
+        protected ToolStripItem CollapseAllToolStripItem;
+        protected ToolStripItem ExpandAllToolStripItem;
 
-        protected ToolStripMenuItem editToolStripItem;
+        protected ToolStripMenuItem EditToolStripItem;
 
-        protected ToolStripItem copyNodeToolStripItem;
-        protected ToolStripItem cutNodeToolStripItem;
-        protected ToolStripItem deleteNodeToolStripItem;
-        protected ToolStripItem pasteNodeAfterToolStripItem;
-        protected ToolStripItem pasteNodeBeforeToolStripItem;
-        protected ToolStripItem pasteNodeReplaceToolStripItem;
+        protected ToolStripItem CopyNodeToolStripItem;
+        protected ToolStripItem CutNodeToolStripItem;
+        protected ToolStripItem DeleteNodeToolStripItem;
+        protected ToolStripItem PasteNodeAfterToolStripItem;
+        protected ToolStripItem PasteNodeBeforeToolStripItem;
+        protected ToolStripItem PasteNodeReplaceToolStripItem;
 
         #region >> Constructors
 
@@ -35,32 +32,31 @@ namespace ZTn.Json.Editor.Forms
         /// Initializes a new instance of the <see cref="JTokenContextMenuStrip"/> class.
         /// </summary>
         public JTokenContextMenuStrip()
-            : base()
         {
-            collapseAllToolStripItem = new ToolStripMenuItem("Collapse All", null, CollapseAll_Click);
-            expandAllToolStripItem = new ToolStripMenuItem("Expand All", null, ExpandAll_Click);
+            CollapseAllToolStripItem = new ToolStripMenuItem(Resources.CollapseAll, null, CollapseAll_Click);
+            ExpandAllToolStripItem = new ToolStripMenuItem(Resources.ExpandAll, null, ExpandAll_Click);
 
-            editToolStripItem = new ToolStripMenuItem("Edit");
+            EditToolStripItem = new ToolStripMenuItem(Resources.Edit);
 
-            copyNodeToolStripItem = new ToolStripMenuItem("Copy", null, CopyNode_Click);
-            cutNodeToolStripItem = new ToolStripMenuItem("Cut", null, CutNode_Click);
-            deleteNodeToolStripItem = new ToolStripMenuItem("Delete Node", null, DeleteNode_Click);
-            pasteNodeAfterToolStripItem = new ToolStripMenuItem("Paste Node After", null, PasteNodeAfter_Click);
-            pasteNodeBeforeToolStripItem = new ToolStripMenuItem("Paste Node Before", null, PasteNodeBefore_Click);
-            pasteNodeReplaceToolStripItem = new ToolStripMenuItem("Replace", null, PasteNodeReplace_Click);
+            CopyNodeToolStripItem = new ToolStripMenuItem(Resources.Copy, null, CopyNode_Click);
+            CutNodeToolStripItem = new ToolStripMenuItem(Resources.Cut, null, CutNode_Click);
+            DeleteNodeToolStripItem = new ToolStripMenuItem(Resources.DeleteNode, null, DeleteNode_Click);
+            PasteNodeAfterToolStripItem = new ToolStripMenuItem(Resources.PasteNodeAfter, null, PasteNodeAfter_Click);
+            PasteNodeBeforeToolStripItem = new ToolStripMenuItem(Resources.PasteNodeBefore, null, PasteNodeBefore_Click);
+            PasteNodeReplaceToolStripItem = new ToolStripMenuItem(Resources.Replace, null, PasteNodeReplace_Click);
 
-            editToolStripItem.DropDownItems.Add(copyNodeToolStripItem);
-            editToolStripItem.DropDownItems.Add(cutNodeToolStripItem);
-            editToolStripItem.DropDownItems.Add(pasteNodeBeforeToolStripItem);
-            editToolStripItem.DropDownItems.Add(pasteNodeAfterToolStripItem);
-            editToolStripItem.DropDownItems.Add(new ToolStripSeparator());
-            editToolStripItem.DropDownItems.Add(pasteNodeReplaceToolStripItem);
-            editToolStripItem.DropDownItems.Add(new ToolStripSeparator());
-            editToolStripItem.DropDownItems.Add(deleteNodeToolStripItem);
+            EditToolStripItem.DropDownItems.Add(CopyNodeToolStripItem);
+            EditToolStripItem.DropDownItems.Add(CutNodeToolStripItem);
+            EditToolStripItem.DropDownItems.Add(PasteNodeBeforeToolStripItem);
+            EditToolStripItem.DropDownItems.Add(PasteNodeAfterToolStripItem);
+            EditToolStripItem.DropDownItems.Add(new ToolStripSeparator());
+            EditToolStripItem.DropDownItems.Add(PasteNodeReplaceToolStripItem);
+            EditToolStripItem.DropDownItems.Add(new ToolStripSeparator());
+            EditToolStripItem.DropDownItems.Add(DeleteNodeToolStripItem);
 
-            Items.Add(collapseAllToolStripItem);
-            Items.Add(expandAllToolStripItem);
-            Items.Add(editToolStripItem);
+            Items.Add(CollapseAllToolStripItem);
+            Items.Add(ExpandAllToolStripItem);
+            Items.Add(EditToolStripItem);
         }
 
         #endregion
@@ -72,34 +68,34 @@ namespace ZTn.Json.Editor.Forms
         {
             if (Visible)
             {
-                jTokenTreeNode = FindSourceTreeNode<JTokenTreeNode>();
+                JTokenNode = FindSourceTreeNode<JTokenTreeNode>();
 
                 // Collapse item shown if node is expanded and has children
-                collapseAllToolStripItem.Visible = jTokenTreeNode.IsExpanded
-                    && jTokenTreeNode.Nodes.Cast<TreeNode>().Any();
+                CollapseAllToolStripItem.Visible = JTokenNode.IsExpanded
+                    && JTokenNode.Nodes.Cast<TreeNode>().Any();
 
                 // Expand item shown if node if not expanded or has a children not expanded
-                expandAllToolStripItem.Visible = !jTokenTreeNode.IsExpanded
-                    || jTokenTreeNode.Nodes.Cast<TreeNode>().Any(t => !t.IsExpanded);
+                ExpandAllToolStripItem.Visible = !JTokenNode.IsExpanded
+                    || JTokenNode.Nodes.Cast<TreeNode>().Any(t => !t.IsExpanded);
 
                 // Remove item enabled if it is not the root or the value of a property
-                deleteNodeToolStripItem.Enabled = (jTokenTreeNode.Parent != null)
-                    && !(jTokenTreeNode.Parent is JPropertyTreeNode);
+                DeleteNodeToolStripItem.Enabled = (JTokenNode.Parent != null)
+                    && !(JTokenNode.Parent is JPropertyTreeNode);
 
                 // Cut item enabled if delete is
-                cutNodeToolStripItem.Enabled = deleteNodeToolStripItem.Enabled;
+                CutNodeToolStripItem.Enabled = DeleteNodeToolStripItem.Enabled;
 
                 // Paste items enabled only when a copy or cut operation is pending
-                pasteNodeAfterToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
-                    && (jTokenTreeNode.Parent != null)
-                    && !(jTokenTreeNode.Parent is JPropertyTreeNode);
+                PasteNodeAfterToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
+                    && (JTokenNode.Parent != null)
+                    && !(JTokenNode.Parent is JPropertyTreeNode);
 
-                pasteNodeBeforeToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
-                    && (jTokenTreeNode.Parent != null)
-                    && !(jTokenTreeNode.Parent is JPropertyTreeNode);
+                PasteNodeBeforeToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
+                    && (JTokenNode.Parent != null)
+                    && !(JTokenNode.Parent is JPropertyTreeNode);
 
-                pasteNodeReplaceToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
-                    && (jTokenTreeNode.Parent != null);
+                PasteNodeReplaceToolStripItem.Enabled = !EditorClipboard<JTokenTreeNode>.IsEmpty()
+                    && (JTokenNode.Parent != null);
             }
 
             base.OnVisibleChanged(e);
@@ -108,44 +104,44 @@ namespace ZTn.Json.Editor.Forms
         #endregion
 
         /// <summary>
-        /// Click event handler for <see cref="collapseAllToolStripItem"/>.
+        /// Click event handler for <see cref="CollapseAllToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void CollapseAll_Click(Object sender, EventArgs e)
         {
-            if (jTokenTreeNode != null)
+            if (JTokenNode != null)
             {
-                jTokenTreeNode.TreeView.BeginUpdate();
+                JTokenNode.TreeView.BeginUpdate();
 
-                jTokenTreeNode.Collapse(false);
+                JTokenNode.Collapse(false);
 
-                jTokenTreeNode.TreeView.EndUpdate();
+                JTokenNode.TreeView.EndUpdate();
             }
         }
 
         /// <summary>
-        /// Click event handler for <see cref="copyNodeToolStripItem"/>.
+        /// Click event handler for <see cref="CopyNodeToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void CopyNode_Click(Object sender, EventArgs e)
         {
-            jTokenTreeNode.ClipboardCopy();
+            JTokenNode.ClipboardCopy();
         }
 
         /// <summary>
-        /// Click event handler for <see cref="cutNodeToolStripItem"/>.
+        /// Click event handler for <see cref="CutNodeToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void CutNode_Click(Object sender, EventArgs e)
         {
-            jTokenTreeNode.ClipboardCut();
+            JTokenNode.ClipboardCut();
         }
 
         /// <summary>
-        /// Click event handler for <see cref="deleteNodeToolStripItem"/>.
+        /// Click event handler for <see cref="DeleteNodeToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -153,33 +149,33 @@ namespace ZTn.Json.Editor.Forms
         {
             try
             {
-                jTokenTreeNode.EditDelete();
+                JTokenNode.EditDelete();
             }
             catch (JTokenTreeNodeDeleteException exception)
             {
-                MessageBox.Show(exception.InnerException.Message, "Deletion action failed");
+                MessageBox.Show(exception.InnerException.Message, Resources.DeletionActionFailed);
             }
         }
 
         /// <summary>
-        /// Click event handler for <see cref="expandAllToolStripItem"/>.
+        /// Click event handler for <see cref="ExpandAllToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void ExpandAll_Click(Object sender, EventArgs e)
         {
-            if (jTokenTreeNode != null)
+            if (JTokenNode != null)
             {
-                jTokenTreeNode.TreeView.BeginUpdate();
+                JTokenNode.TreeView.BeginUpdate();
 
-                jTokenTreeNode.ExpandAll();
+                JTokenNode.ExpandAll();
 
-                jTokenTreeNode.TreeView.EndUpdate();
+                JTokenNode.TreeView.EndUpdate();
             }
         }
 
         /// <summary>
-        /// Click event handler for <see cref="pasteNodeAfterToolStripItem"/>.
+        /// Click event handler for <see cref="PasteNodeAfterToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -187,16 +183,16 @@ namespace ZTn.Json.Editor.Forms
         {
             try
             {
-                jTokenTreeNode.ClipboardPasteAfter();
+                JTokenNode.ClipboardPasteAfter();
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException.Message, "Paste action failed");
+                MessageBox.Show(exception.InnerException.Message, Resources.PasteActionFailed);
             }
         }
 
         /// <summary>
-        /// Click event handler for <see cref="pasteNodeBeforeToolStripItem"/>.
+        /// Click event handler for <see cref="PasteNodeBeforeToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -204,16 +200,16 @@ namespace ZTn.Json.Editor.Forms
         {
             try
             {
-                jTokenTreeNode.ClipboardPasteBefore();
+                JTokenNode.ClipboardPasteBefore();
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException.Message, "Paste action failed");
+                MessageBox.Show(exception.InnerException.Message, Resources.PasteActionFailed);
             }
         }
 
         /// <summary>
-        /// Click event handler for <see cref="pasteNodeReplaceToolStripItem"/>.
+        /// Click event handler for <see cref="PasteNodeReplaceToolStripItem"/>.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -221,11 +217,11 @@ namespace ZTn.Json.Editor.Forms
         {
             try
             {
-                jTokenTreeNode.ClipboardPasteReplace();
+                JTokenNode.ClipboardPasteReplace();
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException.Message, "Paste action failed");
+                MessageBox.Show(exception.InnerException.Message, Resources.PasteActionFailed);
             }
         }
 
@@ -233,7 +229,6 @@ namespace ZTn.Json.Editor.Forms
         /// Identify the Source <see cref="TreeNode"/> at the origin of this <see cref="ContextMenuStrip"/>.
         /// </summary>
         /// <typeparam name="T">Subtype of <see cref="TreeNode"/> to return.</typeparam>
-        /// <param name="sender"><c>null</c> if the instance is not attached to any control or if the source TreeNode does not implement <typeparamref name="T"/></param>
         /// <returns></returns>
         public T FindSourceTreeNode<T>() where T : TreeNode
         {
@@ -242,7 +237,7 @@ namespace ZTn.Json.Editor.Forms
                 return null;
             }
 
-            TreeView treeView = SourceControl as TreeView;
+            var treeView = SourceControl as TreeView;
             if (treeView == null)
             {
                 return null;
