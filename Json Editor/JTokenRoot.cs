@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.IO;
 
 namespace ZTn.Json.Editor
@@ -91,6 +92,11 @@ namespace ZTn.Json.Editor
         /// <param name="jsonStream">Target stream.</param>
         public void Save(Stream jsonStream)
         {
+            if (jTokenValue == null)
+            {
+                return;
+            }
+
             using (var streamWriter = new StreamWriter(jsonStream))
             {
                 streamWriter.Write(jTokenValue.ToString());

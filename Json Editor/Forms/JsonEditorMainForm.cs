@@ -62,7 +62,7 @@ namespace ZTn.Json.Editor.Forms
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "json files (*.json)|*.json",
+                Filter = @"json files (*.json)|*.json",
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
@@ -81,19 +81,21 @@ namespace ZTn.Json.Editor.Forms
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "json files (*.json)|*.json",
+                Filter = @"json files (*.json)|*.json",
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() != DialogResult.OK)
             {
-                using (var stream = saveFileDialog.OpenFile())
+                return;
+            }
+
+            using (var stream = saveFileDialog.OpenFile())
+            {
+                if (stream.CanWrite)
                 {
-                    if (!stream.CanWrite)
-                    {
-                        new JTokenRoot(((JTokenTreeNode)jsonTreeView.TopNode).JTokenTag).Save(stream);
-                    }
+                    jsonEditorItem.Save(stream);
                 }
             }
         }
@@ -195,7 +197,7 @@ namespace ZTn.Json.Editor.Forms
         {
             newtonsoftJsonTypeTextBox.Text = "";
 
-            jsonTypeComboBox.Text = JTokenType.Undefined.ToString();
+            jsonTypeComboBox.Text = String.Format("{0}: {1}", JTokenType.Undefined, node.GetType().FullName);
 
             jsonValueTextBox.ReadOnly = true;
         }
@@ -222,7 +224,7 @@ namespace ZTn.Json.Editor.Forms
             switch (node.JValueTag.Type)
             {
                 case JTokenType.String:
-                    jsonValueTextBox.Text = "\"" + node.JValueTag + "\"";
+                    jsonValueTextBox.Text = @"""" + node.JValueTag + @"""";
                     break;
                 default:
                     jsonValueTextBox.Text = node.JValueTag.ToString();
