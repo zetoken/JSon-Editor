@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Drawing;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,9 +10,31 @@ namespace ZTn.Json.Editor.Forms
 {
     public sealed partial class JsonEditorMainForm : Form
     {
+        private const string DefaultFileFilters = @"json files (*.json)|*.json";
+
         #region >> Fields
 
-        JTokenRoot jsonEditorItem;
+        private JTokenRoot jsonEditorItem;
+
+        private string internalOpenedFileName;
+
+        #endregion
+
+        #region >> Properties
+
+        /// <summary>
+        /// Accessor to file name of opened file.
+        /// </summary>
+        string OpenedFileName
+        {
+            get { return internalOpenedFileName; }
+            set
+            {
+                internalOpenedFileName = value;
+                saveToolStripMenuItem.Enabled = internalOpenedFileName != null;
+                Text = (internalOpenedFileName ?? "") + @" - Json Editor by ZTn";
+            }
+        }
 
         #endregion
 
@@ -26,14 +49,25 @@ namespace ZTn.Json.Editor.Forms
             jsonTreeView.AfterCollapse += jsonTreeView_AfterCollapse;
             jsonTreeView.AfterExpand += jsonTreeView_AfterExpand;
 
+            OpenedFileName = null;
+            SetActionStatus(@"Empty document.", true);
+
+
             var commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Skip(1).Any())
             {
-                using (var stream = new FileStream(commandLineArgs[1], FileMode.Open))
+                OpenedFileName = commandLineArgs[1];
+                try
                 {
-                    SetJsonSourceStream(stream, commandLineArgs[1]);
+                    using (var stream = new FileStream(commandLineArgs[1], FileMode.Open))
+                    {
+                        SetJsonSourceStream(stream, commandLineArgs[1]);
+                    }
                 }
-
+                catch
+                {
+                    OpenedFileName = null;
+                }
             }
         }
 
@@ -77,11 +111,38 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (OpenedFileName == null)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var stream = new FileStream(OpenedFileName, FileMode.Open))
+                {
+                    jsonEditorItem.Save(stream);
+                }
+            }
+            catch
+            {
+                MessageBox.Show(this, string.Format("An error occured when saving file as \"{0}\".", OpenedFileName), @"Save As...");
+
+                OpenedFileName = null;
+                SetActionStatus(@"Document NOT saved.", true);
+
+                return;
+            }
+
+            SetActionStatus(@"Document successfully saved.", false);
+        }
+
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = @"json files (*.json)|*.json",
+                Filter = DefaultFileFilters,
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
@@ -91,13 +152,28 @@ namespace ZTn.Json.Editor.Forms
                 return;
             }
 
-            using (var stream = saveFileDialog.OpenFile())
+            try
             {
-                if (stream.CanWrite)
+                OpenedFileName = saveFileDialog.FileName;
+                using (var stream = saveFileDialog.OpenFile())
                 {
-                    jsonEditorItem.Save(stream);
+                    if (stream.CanWrite)
+                    {
+                        jsonEditorItem.Save(stream);
+                    }
                 }
             }
+            catch
+            {
+                MessageBox.Show(this, string.Format("An error occured when saving file as \"{0}\".", OpenedFileName), @"Save As...");
+
+                OpenedFileName = null;
+                SetActionStatus(@"Document NOT saved.", true);
+
+                return;
+            }
+
+            SetActionStatus(@"Document successfully saved.", false);
         }
 
         private void newJsonObjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -158,12 +234,14 @@ namespace ZTn.Json.Editor.Forms
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
             var node = jsonTreeView.SelectedNode as IJsonTreeNode;
-            if (node != null)
+            if (node == null)
             {
-                jsonTreeView.BeginUpdate();
-                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
-                jsonTreeView.EndUpdate();
+                return;
             }
+
+            jsonTreeView.BeginUpdate();
+            jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+            jsonTreeView.EndUpdate();
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -193,6 +271,7 @@ namespace ZTn.Json.Editor.Forms
         /// </summary>
         /// <param name="node"></param>
         /// <param name="e"></param>
+        // ReSharper disable once UnusedParameter.Local
         private void JsonTreeView_AfterSelectImplementation(TreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = "";
@@ -202,6 +281,7 @@ namespace ZTn.Json.Editor.Forms
             jsonValueTextBox.ReadOnly = true;
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private void JsonTreeView_AfterSelectImplementation(JTokenTreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
@@ -215,6 +295,7 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private void JsonTreeView_AfterSelectImplementation(JValueTreeNode node, TreeViewEventArgs e)
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
@@ -240,20 +321,36 @@ namespace ZTn.Json.Editor.Forms
             {
                 throw new ArgumentNullException("stream");
             }
-            if (fileName == null)
+
+            OpenedFileName = fileName;
+
+            try
             {
-                fileName = "UnKnown.json";
+                jsonEditorItem = new JTokenRoot(stream);
+            }
+            catch
+            {
+                MessageBox.Show(this, string.Format("An error occured when reading \"{0}\"", OpenedFileName), @"Open...");
+
+                OpenedFileName = null;
+                SetActionStatus(@"Document NOT loaded.", true);
+
+                return;
             }
 
-            jsonEditorItem = new JTokenRoot(stream);
+            SetActionStatus(@"Document successfully loaded.", false);
 
             jsonTreeView.Nodes.Clear();
             jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());
+        }
 
-            jsonTreeTabPage.Text = fileName;
+        private void SetActionStatus(string text, bool isError)
+        {
+            actionStatusLabel.Text = text;
+            actionStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
     }
 }
