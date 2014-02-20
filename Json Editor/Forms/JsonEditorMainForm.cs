@@ -13,11 +13,21 @@ namespace ZTn.Json.Editor.Forms
     {
         private const string DefaultFileFilters = @"json files (*.json)|*.json";
 
+        #region >> Delegates
+
+        private delegate void SetActionStatusDelegate(string text, bool isError);
+
+        private delegate void SetJsonStatusDelegate(string text, bool isError);
+
+        #endregion
+
         #region >> Fields
 
         private JTokenRoot jsonEditorItem;
 
         private string internalOpenedFileName;
+
+        private System.Timers.Timer jsonValidationTimer;
 
         #endregion
 
@@ -241,25 +251,21 @@ namespace ZTn.Json.Editor.Forms
                 return;
             }
 
-            jsonTreeView.BeginUpdate();
-
-            try
+            if (jsonValidationTimer != null)
             {
-                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
-                SetJsonStatus("Json format validated.", false);
-            }
-            catch (JsonReaderException exception)
-            {
-                SetJsonStatus(
-                    String.Format("INVALID Json format at (line {0}, position {1})", exception.LineNumber, exception.LinePosition),
-                    true);
-            }
-            catch
-            {
-                SetJsonStatus("INVALID Json format", true);
+                jsonValidationTimer.Stop();
             }
 
-            jsonTreeView.EndUpdate();
+            jsonValidationTimer = new System.Timers.Timer(250);
+
+            jsonValidationTimer.Elapsed += (o, args) =>
+            {
+                jsonValidationTimer.Stop();
+
+                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), new object[] { node });
+            };
+
+            jsonValidationTimer.Start();
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -367,14 +373,50 @@ namespace ZTn.Json.Editor.Forms
 
         private void SetActionStatus(string text, bool isError)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new SetActionStatusDelegate(SetActionStatus), new object[] { text, isError });
+                return;
+            }
+
             actionStatusLabel.Text = text;
             actionStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
 
         private void SetJsonStatus(string text, bool isError)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new SetJsonStatusDelegate(SetActionStatus), new object[] { text, isError });
+                return;
+            }
+
             jsonStatusLabel.Text = text;
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
+        }
+
+        private void JsonValidationTimerHandler(IJsonTreeNode node)
+        {
+            jsonTreeView.BeginUpdate();
+
+            try
+            {
+                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+
+                SetJsonStatus("Json format validated.", false);
+            }
+            catch (JsonReaderException exception)
+            {
+                SetJsonStatus(
+                    String.Format("INVALID Json format at (line {0}, position {1})", exception.LineNumber, exception.LinePosition),
+                    true);
+            }
+            catch
+            {
+                SetJsonStatus("INVALID Json format", true);
+            }
+
+            jsonTreeView.EndUpdate();
         }
     }
 }
