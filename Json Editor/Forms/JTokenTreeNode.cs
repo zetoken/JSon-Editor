@@ -56,15 +56,7 @@ namespace ZTn.Json.Editor.Forms
         /// <remarks>Default simple implementation to be overriden if needed.</remarks>
         public virtual TreeNode AfterJsonTextChange(string jsonString)
         {
-            JTokenRoot jTokenRoot;
-            try
-            {
-                jTokenRoot = new JTokenRoot(jsonString);
-            }
-            catch
-            {
-                return this;
-            }
+            var jTokenRoot = new JTokenRoot(jsonString);
 
             if (JTokenTag.Parent != null)
             {
@@ -133,39 +125,33 @@ namespace ZTn.Json.Editor.Forms
         /// <returns></returns>
         public TreeNode UpdateParentTreeNode(TreeNode newNode, bool insertBefore)
         {
-            if (newNode != this)
+            if (newNode == this)
             {
-                TreeNodeCollection treeNodeCollection;
-                if (Parent != null)
-                {
-                    treeNodeCollection = Parent.Nodes;
-                }
-                else
-                {
-                    treeNodeCollection = TreeView.Nodes;
-                }
-                int nodeIndex = treeNodeCollection.IndexOf(this);
+                return newNode;
+            }
 
-                if (insertBefore)
-                {
-                    treeNodeCollection.Insert(nodeIndex, newNode);
-                }
-                else
-                {
-                    treeNodeCollection.Insert(nodeIndex + 1, newNode);
-                }
+            var treeNodeCollection = Parent != null ? Parent.Nodes : TreeView.Nodes;
 
+            var nodeIndex = treeNodeCollection.IndexOf(this);
 
-                CleanParentTreeNode();
+            if (insertBefore)
+            {
+                treeNodeCollection.Insert(nodeIndex, newNode);
+            }
+            else
+            {
+                treeNodeCollection.Insert(nodeIndex + 1, newNode);
+            }
 
-                if (IsExpanded)
-                {
-                    newNode.Expand();
-                }
-                else
-                {
-                    newNode.Collapse();
-                }
+            CleanParentTreeNode();
+
+            if (IsExpanded)
+            {
+                newNode.Expand();
+            }
+            else
+            {
+                newNode.Collapse();
             }
 
             return newNode;

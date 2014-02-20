@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -51,6 +52,7 @@ namespace ZTn.Json.Editor.Forms
 
             OpenedFileName = null;
             SetActionStatus(@"Empty document.", true);
+            SetJsonStatus(@"", false);
 
 
             var commandLineArgs = Environment.GetCommandLineArgs();
@@ -240,7 +242,23 @@ namespace ZTn.Json.Editor.Forms
             }
 
             jsonTreeView.BeginUpdate();
-            jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+
+            try
+            {
+                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+                SetJsonStatus("Json format validated.", false);
+            }
+            catch (JsonReaderException exception)
+            {
+                SetJsonStatus(
+                    String.Format("INVALID Json format at (line {0}, position {1})", exception.LineNumber, exception.LinePosition),
+                    true);
+            }
+            catch
+            {
+                SetJsonStatus("INVALID Json format", true);
+            }
+
             jsonTreeView.EndUpdate();
         }
 
@@ -351,6 +369,12 @@ namespace ZTn.Json.Editor.Forms
         {
             actionStatusLabel.Text = text;
             actionStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
+        }
+
+        private void SetJsonStatus(string text, bool isError)
+        {
+            jsonStatusLabel.Text = text;
+            jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
     }
 }

@@ -2,6 +2,9 @@
 
 namespace ZTn.Json.Editor.Forms
 {
+    /// <summary>
+    /// Interface to be implemented by TreeNode representing Json data.
+    /// </summary>
     interface IJsonTreeNode
     {
         /// <summary>

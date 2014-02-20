@@ -66,15 +66,8 @@ namespace ZTn.Json.Editor.Forms
             }
 
             // To allow parsing, the partial json string is first enclosed as a json object
-            JTokenRoot jTokenRoot;
-            try
-            {
-                jTokenRoot = new JTokenRoot("{" + jsonString + "}");
-            }
-            catch
-            {
-                return this;
-            }
+
+            var jTokenRoot = new JTokenRoot("{" + jsonString + "}");
 
             // Extract the contained JProperties as the JObject was only a container
             // As Json.NET internally clones JToken instances having Parent!=null when inserting in a JContainer,
