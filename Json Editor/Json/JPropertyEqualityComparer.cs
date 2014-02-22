@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
-namespace ZTn.Json.Editor.Linq
+namespace ZTn.Json.Editor.Json
 {
     /// <summary>
     /// Defines methods to support the comparison of <see cref="JProperty"/> objects for equality.

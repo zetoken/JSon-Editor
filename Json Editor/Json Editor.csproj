@@ -101,7 +101,7 @@
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Linq\ForEachExtension.cs" />
-    <Compile Include="Linq\JPropertyEqualityComparer.cs" />
+    <Compile Include="Json\JPropertyEqualityComparer.cs" />
     <Compile Include="Extensions\JTokenTreeNodeActions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
