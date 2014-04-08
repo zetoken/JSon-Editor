@@ -49,8 +49,8 @@
             this.aboutJsonEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guiStatusStrip = new System.Windows.Forms.StatusStrip();
             this.actionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.jsonStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.jsonStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.jsonTreeViewSplitContainer)).BeginInit();
             this.jsonTreeViewSplitContainer.Panel1.SuspendLayout();
             this.jsonTreeViewSplitContainer.Panel2.SuspendLayout();
@@ -61,6 +61,9 @@
             // 
             // jsonTreeViewSplitContainer
             // 
+            this.jsonTreeViewSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.jsonTreeViewSplitContainer.Location = new System.Drawing.Point(0, 24);
             this.jsonTreeViewSplitContainer.Name = "jsonTreeViewSplitContainer";
             // 
@@ -264,17 +267,17 @@
             this.actionStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.actionStatusLabel.Text = "Status";
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(892, 17);
+            this.toolStripStatusLabel1.Spring = true;
+            // 
             // jsonStatusLabel
             // 
             this.jsonStatusLabel.Name = "jsonStatusLabel";
             this.jsonStatusLabel.Size = new System.Drawing.Size(62, 17);
             this.jsonStatusLabel.Text = "JsonStatus";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(861, 17);
-            this.toolStripStatusLabel1.Spring = true;
             // 
             // JsonEditorMainForm
             // 
