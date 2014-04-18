@@ -251,21 +251,7 @@ namespace ZTn.Json.Editor.Forms
                 return;
             }
 
-            if (jsonValidationTimer != null)
-            {
-                jsonValidationTimer.Stop();
-            }
-
-            jsonValidationTimer = new System.Timers.Timer(250);
-
-            jsonValidationTimer.Elapsed += (o, args) =>
-            {
-                jsonValidationTimer.Stop();
-
-                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), new object[] { node });
-            };
-
-            jsonValidationTimer.Start();
+            StartValidationTimer(node);
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -393,6 +379,25 @@ namespace ZTn.Json.Editor.Forms
 
             jsonStatusLabel.Text = text;
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
+        }
+
+        private void StartValidationTimer(IJsonTreeNode node)
+        {
+            if (jsonValidationTimer != null)
+            {
+                jsonValidationTimer.Stop();
+            }
+
+            jsonValidationTimer = new System.Timers.Timer(250);
+
+            jsonValidationTimer.Elapsed += (o, args) =>
+            {
+                jsonValidationTimer.Stop();
+
+                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), new object[] { node });
+            };
+
+            jsonValidationTimer.Start();
         }
 
         private void JsonValidationTimerHandler(IJsonTreeNode node)

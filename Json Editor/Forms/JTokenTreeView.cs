@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Reflection;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Extensions;
+using ZTn.Json.Editor.Generic;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -10,7 +13,6 @@ namespace ZTn.Json.Editor.Forms
     {
         #region >> Fields
 
-        JTokenTreeNode dragDropSource;
         JTokenTreeNode lastDragDropTarget;
         DateTime lastDragDropDateTime;
         Color lastDragDropBackColor;
@@ -53,22 +55,29 @@ namespace ZTn.Json.Editor.Forms
 
         #endregion
 
+        /// <summary>
+        /// Occurs when the user begins dragging a node.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemDragHandler(object sender, ItemDragEventArgs e)
         {
-            dragDropSource = e.Item as JTokenTreeNode;
+            var sourceNode = e.Item as JTokenTreeNode;
 
-            if (dragDropSource != null)
+            if (sourceNode == null)
             {
-                lastValidDragDropEffect = DragDropEffects.Move;
-                DoDragDrop(e.Item, DragDropEffects.Move);
+                return;
             }
+
+            lastValidDragDropEffect = DragDropEffects.Copy;
+            DoDragDrop(e.Item, DragDropEffects.Move | DragDropEffects.Copy);
         }
 
-        private void DragEnterHandler(object sender, DragEventArgs e)
-        {
-            e.Effect = e.AllowedEffect;
-        }
-
+        /// <summary>
+        /// Occurs when a drag-and-drop operation is completed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DragDropHandler(object sender, DragEventArgs e)
         {
             if (lastDragDropTarget != null)
@@ -77,60 +86,118 @@ namespace ZTn.Json.Editor.Forms
                 lastDragDropTarget = null;
             }
 
-            var node = e.Data.GetData(e.Data.GetFormats().FirstOrDefault(), true) as JTokenTreeNode;
+            var sourceNode = GetDragDropSourceNode(e);
 
-            if (node != null)
+            if (sourceNode == null)
             {
-                MessageBox.Show(@"Drag & Drop Ready");
+                MessageBox.Show(@"Drag & Drop Canceled: Unknown Source");
+
+                return;
+            }
+
+            var targetNode = GetDragDropTargetNode(e);
+
+            switch (e.Effect)
+            {
+                case DragDropEffects.Copy:
+                    DoDragDropCopy((dynamic)sourceNode, (dynamic)targetNode);
+                    break;
+                case DragDropEffects.Move:
+                    DoDragDropMove((dynamic)sourceNode, (dynamic)targetNode);
+                    break;
             }
         }
 
+        #region >> DoDragDropCopy
+
+        /// <summary>
+        /// Catches all unmanaged copies.
+        /// </summary>
+        /// <param name="sourceNode"></param>
+        /// <param name="targetNode"></param>
+        private void DoDragDropCopy(JTokenTreeNode sourceNode, JTokenTreeNode targetNode)
+        {
+            MessageBox.Show(@"Drag & Drop: Unmanaged Copy");
+        }
+
+        /// <summary>
+        /// Copies a JProperty into a JObject as first child.
+        /// </summary>
+        /// <param name="sourceNode"></param>
+        /// <param name="targetNode"></param>
+        private void DoDragDropCopy(JPropertyTreeNode sourceNode, JObjectTreeNode targetNode)
+        {
+            sourceNode.ClipboardCopy();
+            targetNode.ClipboardPasteInto();
+        }
+
+        /// <summary>
+        /// Copies a JObject into a JArray as first child.
+        /// </summary>
+        /// <param name="sourceNode"></param>
+        /// <param name="targetNode"></param>
+        private void DoDragDropCopy(JObjectTreeNode sourceNode, JArrayTreeNode targetNode)
+        {
+            sourceNode.ClipboardCopy();
+            targetNode.ClipboardPasteInto();
+        }
+
+        /// <summary>
+        /// Copies a JArray into a JArray as first child.
+        /// </summary>
+        /// <param name="sourceNode"></param>
+        /// <param name="targetNode"></param>
+        private void DoDragDropCopy(JArrayTreeNode sourceNode, JArrayTreeNode targetNode)
+        {
+            sourceNode.ClipboardCopy();
+            targetNode.ClipboardPasteInto();
+        }
+
+        #endregion
+
+        #region >> DoDragDropMove
+
+        private void DoDragDropMove(JTokenTreeNode sourceNode, JTokenTreeNode targetNode)
+        {
+            // TODO: Move sourceNode to target
+            MessageBox.Show(@"Drag & Drop: Unmanaged Move");
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Occurs when an object is dragged into the control's bounds.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DragEnterHandler(object sender, DragEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Occurs when an object is dragged over the control's bounds. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DragOverHandler(object sender, DragEventArgs e)
         {
-            Point targetPoint = PointToClient(new Point(e.X, e.Y));
+            var targetNode = GetDragDropTargetNode(e);
 
-            var targetNode = GetNodeAt(targetPoint) as JTokenTreeNode;
-
-            if (targetNode != null)
+            var keyState = (KeyStates)e.KeyState;
+            if ((keyState & KeyStates.Control) == KeyStates.Control)
             {
-                if (targetNode != lastDragDropTarget)
-                {
-                    if (IsDragDropValid(targetNode))
-                    {
-                        if (e.Effect == DragDropEffects.None)
-                        {
-                            e.Effect = lastValidDragDropEffect;
-                        }
-
-                        lastDragDropBackColor = targetNode.BackColor;
-                        targetNode.BackColor = Color.BlueViolet;
-                    }
-                    else
-                    {
-                        if (e.Effect != DragDropEffects.None)
-                        {
-                            lastValidDragDropEffect = e.Effect;
-                            e.Effect = DragDropEffects.None;
-                        }
-                    }
-
-                    if (lastDragDropTarget != null)
-                    {
-                        lastDragDropTarget.BackColor = lastDragDropBackColor;
-                    }
-
-                    lastDragDropTarget = targetNode;
-                    lastDragDropDateTime = DateTime.Now;
-                }
-                else
-                {
-                    if (DateTime.Now - lastDragDropDateTime >= new TimeSpan(5000000))
-                    {
-                        targetNode.Expand();
-                    }
-                }
+                e.Effect = DragDropEffects.Copy;
+            }
+            else if ((keyState & KeyStates.Shift) == KeyStates.Shift)
+            {
+                e.Effect = DragDropEffects.Move;
             }
             else
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+
+            if (targetNode == null)
             {
                 if (e.Effect != DragDropEffects.None)
                 {
@@ -144,23 +211,81 @@ namespace ZTn.Json.Editor.Forms
                 }
 
                 lastDragDropTarget = null;
+
+                return;
             }
+
+            if (targetNode == lastDragDropTarget)
+            {
+                if (DateTime.Now - lastDragDropDateTime >= new TimeSpan(5000000))
+                {
+                    targetNode.Expand();
+                }
+
+                return;
+            }
+
+            var sourceNode = GetDragDropSourceNode(e);
+
+            if (IsDragDropValid(sourceNode, targetNode))
+            {
+                if (e.Effect == DragDropEffects.None)
+                {
+                    e.Effect = lastValidDragDropEffect;
+                }
+
+                lastDragDropBackColor = targetNode.BackColor;
+                targetNode.BackColor = Color.BlueViolet;
+            }
+            else
+            {
+                if (e.Effect != DragDropEffects.None)
+                {
+                    lastValidDragDropEffect = e.Effect;
+                    e.Effect = DragDropEffects.None;
+                }
+            }
+
+            if (lastDragDropTarget != null)
+            {
+                lastDragDropTarget.BackColor = lastDragDropBackColor;
+            }
+
+            lastDragDropTarget = targetNode;
+            lastDragDropDateTime = DateTime.Now;
         }
 
-        private bool IsDragDropValid(JTokenTreeNode node)
+        private static JTokenTreeNode GetDragDropSourceNode(DragEventArgs e)
         {
-            if (dragDropSource == null || node == null)
+            return e.Data.GetData(e.Data.GetFormats().FirstOrDefault(), true) as JTokenTreeNode;
+        }
+
+        private JTokenTreeNode GetDragDropTargetNode(DragEventArgs e)
+        {
+            var targetPoint = PointToClient(new Point(e.X, e.Y));
+            var targetNode = GetNodeAt(targetPoint) as JTokenTreeNode;
+
+            return targetNode;
+        }
+
+        private bool IsDragDropValid(JTokenTreeNode sourceNode, JTokenTreeNode targetNode)
+        {
+            if (sourceNode == null || targetNode == null)
             {
                 return false;
             }
 
-            if (dragDropSource.JTokenTag is JProperty)
+            if (sourceNode.JTokenTag is JProperty)
             {
-                return (node.JTokenTag is JObject);
+                return targetNode.JTokenTag is JObject;
             }
-            if (dragDropSource.JTokenTag is JObject)
+            if (sourceNode.JTokenTag is JObject)
             {
-                return node.JTokenTag is JProperty || node.JTokenTag is JArray;
+                return targetNode.JTokenTag is JProperty || targetNode.JTokenTag is JArray;
+            }
+            if (sourceNode.JTokenTag is JArray)
+            {
+                return targetNode.JTokenTag is JArray;
             }
 
             return false;

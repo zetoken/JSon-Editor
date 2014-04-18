@@ -91,6 +91,7 @@
     <Compile Include="Forms\JTokenTreeView.Designer.cs">
       <DependentUpon>JTokenTreeView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\KeyStates.cs" />
     <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
     <Compile Include="Generic\EditorClipboard.cs" />
     <Compile Include="JTokenRoot.cs" />

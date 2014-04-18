@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Windows.Forms;
 using ZTn.Json.Editor.Forms;
@@ -38,7 +39,7 @@ namespace ZTn.Json.Editor.Extensions
         {
             node.ClipboardPaste(
                 jt => node.JTokenTag.AddAfterSelf(jt),
-                n => node.UpdateParentTreeNode(n, false)
+                n => node.InsertInParent(n, false)
                 );
         }
 
@@ -50,7 +51,19 @@ namespace ZTn.Json.Editor.Extensions
         {
             node.ClipboardPaste(
                 jt => node.JTokenTag.AddBeforeSelf(jt),
-                n => node.UpdateParentTreeNode(n, true)
+                n => node.InsertInParent(n, true)
+                );
+        }
+
+        /// <summary>
+        /// Implementation of "paste into" action.
+        /// </summary>
+        /// <param name="node"></param>
+        public static void ClipboardPasteInto(this JTokenTreeNode node)
+        {
+            node.ClipboardPaste(
+                jt => ((JContainer)node.JTokenTag).AddFirst(jt),
+                n => node.InsertInCurrent(n)
                 );
         }
 
@@ -62,7 +75,7 @@ namespace ZTn.Json.Editor.Extensions
         {
             node.ClipboardPaste(
                 jt => node.JTokenTag.Replace(jt),
-                n => node.UpdateParentTreeNode(n, true)
+                n => node.InsertInParent(n, true)
                 );
         }
 
@@ -74,9 +87,9 @@ namespace ZTn.Json.Editor.Extensions
         /// <param name="pasteTreeNodeImplementation">Implementation of paste action in the treeView.</param>
         private static void ClipboardPaste(this JTokenTreeNode node, Action<JToken> pasteJTokenImplementation, Action<TreeNode> pasteTreeNodeImplementation)
         {
-            JTokenTreeNode sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
+            var sourceJTokenTreeNode = EditorClipboard<JTokenTreeNode>.Get();
 
-            JToken jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
+            var jTokenSource = sourceJTokenTreeNode.JTokenTag.DeepClone();
 
             try
             {
@@ -93,7 +106,7 @@ namespace ZTn.Json.Editor.Extensions
                 throw new JTokenTreeNodePasteException(exception);
             }
 
-            TreeView treeView = node.TreeView;
+            var treeView = node.TreeView;
             treeView.BeginUpdate();
 
             pasteTreeNodeImplementation(JsonTreeNodeFactory.Create(jTokenSource));
@@ -113,24 +126,26 @@ namespace ZTn.Json.Editor.Extensions
         /// <param name="node"></param>
         public static void EditDelete(this JTokenTreeNode node)
         {
-            if (node != null)
+            if (node == null)
             {
-                try
-                {
-                    node.JTokenTag.Remove();
-                }
-                catch (Exception exception)
-                {
-                    throw new JTokenTreeNodeDeleteException(exception);
-                }
-
-                TreeView treeView = node.TreeView;
-                treeView.BeginUpdate();
-
-                node.CleanParentTreeNode();
-
-                treeView.EndUpdate();
+                return;
             }
+
+            try
+            {
+                node.JTokenTag.Remove();
+            }
+            catch (Exception exception)
+            {
+                throw new JTokenTreeNodeDeleteException(exception);
+            }
+
+            var treeView = node.TreeView;
+            treeView.BeginUpdate();
+
+            node.CleanParentTreeNode();
+
+            treeView.EndUpdate();
         }
     }
 }
