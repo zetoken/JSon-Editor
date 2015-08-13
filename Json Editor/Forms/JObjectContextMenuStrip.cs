@@ -8,7 +8,9 @@ namespace ZTn.Json.Editor.Forms
     class JObjectContextMenuStrip : JTokenContextMenuStrip
     {
         protected ToolStripMenuItem ObjectToolStripItem;
-        protected ToolStripMenuItem InsertPropertyToolStripItem;
+        protected ToolStripMenuItem InsertPropertyAsValueToolStripItem;
+        protected ToolStripMenuItem InsertPropertyAsArrayToolStripItem;
+        protected ToolStripMenuItem InsertPropertyAsObjectToolStripItem;
 
         #region >> Constructors
 
@@ -18,20 +20,19 @@ namespace ZTn.Json.Editor.Forms
         public JObjectContextMenuStrip()
         {
             ObjectToolStripItem = new ToolStripMenuItem(Resources.JsonObject);
-            InsertPropertyToolStripItem = new ToolStripMenuItem(Resources.InsertProperty, null, InsertProperty_Click);
+            InsertPropertyAsValueToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsValue, null, InsertProperty_Click);
+            InsertPropertyAsArrayToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsArray, null, InsertPropertyAsArray_Click);
+            InsertPropertyAsObjectToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsObject, null, InsertPropertyAsObject_Click);
 
-            ObjectToolStripItem.DropDownItems.Add(InsertPropertyToolStripItem);
+            ObjectToolStripItem.DropDownItems.Add(InsertPropertyAsValueToolStripItem);
+            ObjectToolStripItem.DropDownItems.Add(InsertPropertyAsArrayToolStripItem);
+            ObjectToolStripItem.DropDownItems.Add(InsertPropertyAsObjectToolStripItem);
             Items.Add(ObjectToolStripItem);
         }
 
         #endregion
 
-        /// <summary>
-        /// Click event handler for <see cref="InsertPropertyToolStripItem"/>.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void InsertProperty_Click(Object sender, EventArgs e)
+        private void InsertProperty(object propertyValue)
         {
             var jObjectTreeNode = JTokenNode as JObjectTreeNode;
 
@@ -40,13 +41,43 @@ namespace ZTn.Json.Editor.Forms
                 return;
             }
 
-            var newJProperty = new JProperty("name" + DateTime.Now.Ticks, "v");
+            var newJProperty = new JProperty("name" + DateTime.Now.Ticks, propertyValue);
             jObjectTreeNode.JObjectTag.AddFirst(newJProperty);
 
             var jPropertyTreeNode = (JPropertyTreeNode)JsonTreeNodeFactory.Create(newJProperty);
             jObjectTreeNode.Nodes.Insert(0, jPropertyTreeNode);
 
             jObjectTreeNode.TreeView.SelectedNode = jPropertyTreeNode;
+        }
+
+        /// <summary>
+        /// Click event handler for <see cref="InsertPropertyAsValueToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InsertProperty_Click(Object sender, EventArgs e)
+        {
+            InsertProperty("v");
+        }
+
+        /// <summary>
+        /// Click event handler for <see cref="InsertPropertyAsArrayToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InsertPropertyAsArray_Click(object sender, EventArgs e)
+        {
+            InsertProperty(new JArray());
+        }
+
+        /// <summary>
+        /// Click event handler for <see cref="InsertPropertyAsObjectToolStripItem"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InsertPropertyAsObject_Click(object sender, EventArgs e)
+        {
+            InsertProperty(new JObject());
         }
     }
 }

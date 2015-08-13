@@ -144,8 +144,14 @@
   <data name="InsertObject" xml:space="preserve">
     <value>Insert Object</value>
   </data>
-  <data name="InsertProperty" xml:space="preserve">
-    <value>Insert Property</value>
+  <data name="InsertPropertyAsArray" xml:space="preserve">
+    <value>Insert Property as Array</value>
+  </data>
+  <data name="InsertPropertyAsObject" xml:space="preserve">
+    <value>Insert Property as Object</value>
+  </data>
+  <data name="InsertPropertyAsValue" xml:space="preserve">
+    <value>Insert Property as Value</value>
   </data>
   <data name="InsertValue" xml:space="preserve">
     <value>Insert Value</value>
