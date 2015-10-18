@@ -23,7 +23,13 @@ namespace ZTn.Json.Editor.Forms
 
         #region >> Fields
 
-        private JTokenRoot jsonEditorItem;
+        private JTokenRoot JsonEditorItem
+        {
+            get
+            {
+                return jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
+            }
+        }
 
         private string internalOpenedFileName;
 
@@ -43,6 +49,7 @@ namespace ZTn.Json.Editor.Forms
             {
                 internalOpenedFileName = value;
                 saveToolStripMenuItem.Enabled = internalOpenedFileName != null;
+                saveAsToolStripMenuItem.Enabled = internalOpenedFileName != null;
                 Text = (internalOpenedFileName ?? "") + @" - Json Editor by ZTn";
             }
         }
@@ -134,7 +141,7 @@ namespace ZTn.Json.Editor.Forms
             {
                 using (var stream = new FileStream(OpenedFileName, FileMode.Open))
                 {
-                    jsonEditorItem.Save(stream);
+                    JsonEditorItem.Save(stream);
                 }
             }
             catch
@@ -171,7 +178,7 @@ namespace ZTn.Json.Editor.Forms
                 {
                     if (stream.CanWrite)
                     {
-                        jsonEditorItem.Save(stream);
+                        JsonEditorItem.Save(stream);
                     }
                 }
             }
@@ -190,24 +197,28 @@ namespace ZTn.Json.Editor.Forms
 
         private void newJsonObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jsonEditorItem = new JTokenRoot("{}");
+            var jsonEditorItem = new JTokenRoot("{}");
 
             jsonTreeView.Nodes.Clear();
             jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());
+
+            saveAsToolStripMenuItem.Enabled =true;
         }
 
         private void newJsonArrayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            jsonEditorItem = new JTokenRoot("[]");
+            var jsonEditorItem = new JTokenRoot("[]");
 
             jsonTreeView.Nodes.Clear();
             jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());
+
+            saveAsToolStripMenuItem.Enabled = true;
         }
 
         private void aboutJsonEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -334,6 +345,7 @@ namespace ZTn.Json.Editor.Forms
 
             OpenedFileName = fileName;
 
+            JTokenRoot jsonEditorItem;
             try
             {
                 jsonEditorItem = new JTokenRoot(stream);
@@ -349,6 +361,7 @@ namespace ZTn.Json.Editor.Forms
             }
 
             SetActionStatus(@"Document successfully loaded.", false);
+            saveAsToolStripMenuItem.Enabled = true;
 
             jsonTreeView.Nodes.Clear();
             jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));

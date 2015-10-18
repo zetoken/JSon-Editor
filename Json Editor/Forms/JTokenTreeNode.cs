@@ -129,18 +129,26 @@ namespace ZTn.Json.Editor.Forms
 
             var treeNodeCollection = Parent != null ? Parent.Nodes : TreeView.Nodes;
 
-            var nodeIndex = treeNodeCollection.IndexOf(this);
-
-            if (insertBefore)
+            if (Parent != null)
             {
-                treeNodeCollection.Insert(nodeIndex, newNode);
+                var nodeIndex = treeNodeCollection.IndexOf(this);
+
+                if (insertBefore)
+                {
+                    treeNodeCollection.Insert(nodeIndex, newNode);
+                }
+                else
+                {
+                    treeNodeCollection.Insert(nodeIndex + 1, newNode);
+                }
+
+                CleanParentTreeNode();
             }
             else
             {
-                treeNodeCollection.Insert(nodeIndex + 1, newNode);
+                treeNodeCollection.Clear();
+                treeNodeCollection.Insert(0, newNode);
             }
-
-            CleanParentTreeNode();
 
             if (IsExpanded)
             {
