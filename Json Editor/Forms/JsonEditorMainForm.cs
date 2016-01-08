@@ -23,13 +23,8 @@ namespace ZTn.Json.Editor.Forms
 
         #region >> Fields
 
-        private JTokenRoot JsonEditorItem
-        {
-            get
-            {
-                return jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
-            }
-        }
+        private JTokenRoot JsonEditorItem =>
+            jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
 
         private string internalOpenedFileName;
 
@@ -115,7 +110,7 @@ namespace ZTn.Json.Editor.Forms
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = @"json files (*.json)|*.json",
+                Filter = @"json files (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
@@ -146,7 +141,7 @@ namespace ZTn.Json.Editor.Forms
             }
             catch
             {
-                MessageBox.Show(this, string.Format("An error occured when saving file as \"{0}\".", OpenedFileName), @"Save As...");
+                MessageBox.Show(this, $"An error occured when saving file as \"{OpenedFileName}\".", @"Save As...");
 
                 OpenedFileName = null;
                 SetActionStatus(@"Document NOT saved.", true);
@@ -184,7 +179,7 @@ namespace ZTn.Json.Editor.Forms
             }
             catch
             {
-                MessageBox.Show(this, string.Format("An error occured when saving file as \"{0}\".", OpenedFileName), @"Save As...");
+                MessageBox.Show(this, $"An error occured when saving file as \"{OpenedFileName}\".", @"Save As...");
 
                 OpenedFileName = null;
                 SetActionStatus(@"Document NOT saved.", true);
@@ -205,7 +200,7 @@ namespace ZTn.Json.Editor.Forms
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());
 
-            saveAsToolStripMenuItem.Enabled =true;
+            saveAsToolStripMenuItem.Enabled = true;
         }
 
         private void newJsonArrayToolStripMenuItem_Click(object sender, EventArgs e)
@@ -239,19 +234,13 @@ namespace ZTn.Json.Editor.Forms
         private void jsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
             var node = e.Node as IJsonTreeNode;
-            if (node != null)
-            {
-                node.AfterCollapse();
-            }
+            node?.AfterCollapse();
         }
 
         private void jsonTreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
             var node = e.Node as IJsonTreeNode;
-            if (node != null)
-            {
-                node.AfterExpand();
-            }
+            node?.AfterExpand();
         }
 
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
@@ -297,7 +286,7 @@ namespace ZTn.Json.Editor.Forms
         {
             newtonsoftJsonTypeTextBox.Text = "";
 
-            jsonTypeComboBox.Text = String.Format("{0}: {1}", JTokenType.Undefined, node.GetType().FullName);
+            jsonTypeComboBox.Text = $"{JTokenType.Undefined}: {node.GetType().FullName}";
 
             jsonValueTextBox.ReadOnly = true;
         }
@@ -321,15 +310,15 @@ namespace ZTn.Json.Editor.Forms
         {
             newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
 
-            jsonTypeComboBox.Text = node.JValueTag.Type.ToString();
+            jsonTypeComboBox.Text = $"{node.JValueTag.Type}";
 
             switch (node.JValueTag.Type)
             {
                 case JTokenType.String:
-                    jsonValueTextBox.Text = @"""" + node.JValueTag + @"""";
+                    jsonValueTextBox.Text = $@"""{node.JValueTag}""";
                     break;
                 default:
-                    jsonValueTextBox.Text = node.JValueTag.ToString();
+                    jsonValueTextBox.Text = $"{node.JValueTag}";
                     break;
             }
         }
@@ -340,7 +329,7 @@ namespace ZTn.Json.Editor.Forms
         {
             if (stream == null)
             {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             OpenedFileName = fileName;
@@ -352,7 +341,7 @@ namespace ZTn.Json.Editor.Forms
             }
             catch
             {
-                MessageBox.Show(this, string.Format("An error occured when reading \"{0}\"", OpenedFileName), @"Open...");
+                MessageBox.Show(this, $"An error occured when reading \"{OpenedFileName}\"", @"Open...");
 
                 OpenedFileName = null;
                 SetActionStatus(@"Document NOT loaded.", true);
@@ -374,7 +363,7 @@ namespace ZTn.Json.Editor.Forms
         {
             if (InvokeRequired)
             {
-                Invoke(new SetActionStatusDelegate(SetActionStatus), new object[] { text, isError });
+                Invoke(new SetActionStatusDelegate(SetActionStatus), text, isError);
                 return;
             }
 
@@ -386,7 +375,7 @@ namespace ZTn.Json.Editor.Forms
         {
             if (InvokeRequired)
             {
-                Invoke(new SetJsonStatusDelegate(SetActionStatus), new object[] { text, isError });
+                Invoke(new SetJsonStatusDelegate(SetActionStatus), text, isError);
                 return;
             }
 
@@ -396,10 +385,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void StartValidationTimer(IJsonTreeNode node)
         {
-            if (jsonValidationTimer != null)
-            {
-                jsonValidationTimer.Stop();
-            }
+            jsonValidationTimer?.Stop();
 
             jsonValidationTimer = new System.Timers.Timer(250);
 
@@ -407,7 +393,7 @@ namespace ZTn.Json.Editor.Forms
             {
                 jsonValidationTimer.Stop();
 
-                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), new object[] { node });
+                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), node);
             };
 
             jsonValidationTimer.Start();
@@ -426,7 +412,7 @@ namespace ZTn.Json.Editor.Forms
             catch (JsonReaderException exception)
             {
                 SetJsonStatus(
-                    String.Format("INVALID Json format at (line {0}, position {1})", exception.LineNumber, exception.LinePosition),
+                    $"INVALID Json format at (line {exception.LineNumber}, position {exception.LinePosition})",
                     true);
             }
             catch
