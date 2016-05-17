@@ -1,5 +1,6 @@
 JSon-Editor by ZTn
 ==================
+[![appveyor-build-status](https://ci.appveyor.com/api/projects/status/ojmuwo49qwb1xlae/branch/master?svg=true)](https://ci.appveyor.com/project/zetoken/json-editor/branch/master)
 
 A simple JSON Editor written in C# using the excellent Json.NET API from http://newtonsoft.com/json.
 
