@@ -168,6 +168,8 @@ namespace ZTn.Json.JsonTreeView.Controls
                    {
                        case JTokenType.String:
                            return $@"""{node.JValueTag}""";
+                       case JTokenType.Boolean:
+                           return $"{node.JValueTag}".ToLower();
                        default:
                            return $"{node.JValueTag}";
                    }
