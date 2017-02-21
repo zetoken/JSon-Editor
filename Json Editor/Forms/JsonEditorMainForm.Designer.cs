@@ -1,4 +1,6 @@
-﻿namespace ZTn.Json.Editor.Forms
+﻿using ZTn.Json.JsonTreeView.Controls;
+
+namespace ZTn.Json.Editor.Forms
 {
     partial class JsonEditorMainForm
     {
@@ -30,7 +32,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JsonEditorMainForm));
             this.jsonTreeViewSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.jsonTreeView = new ZTn.Json.Editor.Forms.JTokenTreeView();
             this.jsonTypeComboBox = new System.Windows.Forms.ComboBox();
             this.jsonValueTextBox = new System.Windows.Forms.TextBox();
             this.jsonValueLabel = new System.Windows.Forms.Label();
@@ -51,6 +52,7 @@
             this.actionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.jsonStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.jTokenTree = new JTokenTreeUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.jsonTreeViewSplitContainer)).BeginInit();
             this.jsonTreeViewSplitContainer.Panel1.SuspendLayout();
             this.jsonTreeViewSplitContainer.Panel2.SuspendLayout();
@@ -69,7 +71,7 @@
             // 
             // jsonTreeViewSplitContainer.Panel1
             // 
-            this.jsonTreeViewSplitContainer.Panel1.Controls.Add(this.jsonTreeView);
+            this.jsonTreeViewSplitContainer.Panel1.Controls.Add(this.jTokenTree);
             this.jsonTreeViewSplitContainer.Panel1MinSize = 200;
             // 
             // jsonTreeViewSplitContainer.Panel2
@@ -86,19 +88,16 @@
             this.jsonTreeViewSplitContainer.SplitterDistance = 672;
             this.jsonTreeViewSplitContainer.TabIndex = 8;
             // 
-            // jsonTreeView
+            // jTokenTree
             // 
-            this.jsonTreeView.AllowDrop = true;
-            this.jsonTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.jTokenTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.jsonTreeView.HideSelection = false;
-            this.jsonTreeView.Location = new System.Drawing.Point(3, 3);
-            this.jsonTreeView.Name = "jsonTreeView";
-            this.jsonTreeView.Size = new System.Drawing.Size(666, 546);
-            this.jsonTreeView.TabIndex = 0;
-            this.jsonTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.jsonTreeView_AfterSelect);
-            this.jsonTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.jsonTreeView_NodeMouseClick);
+            this.jTokenTree.Location = new System.Drawing.Point(3, 3);
+            this.jTokenTree.Margin = new System.Windows.Forms.Padding(6);
+            this.jTokenTree.Name = "jTokenTree";
+            this.jTokenTree.Size = new System.Drawing.Size(666, 546);
+            this.jTokenTree.TabIndex = 2;
             // 
             // jsonTypeComboBox
             // 
@@ -323,7 +322,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutJsonEditorToolStripMenuItem;
-        public JTokenTreeView jsonTreeView;
+        private JTokenTreeUserControl jTokenTree;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.StatusStrip guiStatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel actionStatusLabel;

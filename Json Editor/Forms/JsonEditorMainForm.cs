@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using ZTn.Json.Editor.Linq;
 
 namespace ZTn.Json.Editor.Forms
 {
@@ -22,9 +21,6 @@ namespace ZTn.Json.Editor.Forms
         #endregion
 
         #region >> Fields
-
-        private JTokenRoot JsonEditorItem =>
-            jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
 
         private string internalOpenedFileName;
 
@@ -59,13 +55,22 @@ namespace ZTn.Json.Editor.Forms
 
             jsonTypeComboBox.DataSource = Enum.GetValues(typeof(JTokenType));
 
-            jsonTreeView.AfterCollapse += jsonTreeView_AfterCollapse;
-            jsonTreeView.AfterExpand += jsonTreeView_AfterExpand;
+            jTokenTree.AfterSelect += (sender, eventArgs) =>
+            {
+                newtonsoftJsonTypeTextBox.Text = eventArgs.TypeName;
+
+                jsonTypeComboBox.Text = eventArgs.JTokenTypeName;
+
+                // If jsonValueTextBox is focused then it triggers this event in the update process, so don't update it again ! (risk: infinite loop between events).
+                if (!jsonValueTextBox.Focused)
+                {
+                    jsonValueTextBox.Text = eventArgs.GetJsonString();
+                }
+            };
 
             OpenedFileName = null;
             SetActionStatus(@"Empty document.", true);
             SetJsonStatus(@"", false);
-
 
             var commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Skip(1).Any())
@@ -136,7 +141,7 @@ namespace ZTn.Json.Editor.Forms
             {
                 using (var stream = new FileStream(OpenedFileName, FileMode.Open))
                 {
-                    JsonEditorItem.Save(stream);
+                    jTokenTree.SaveJson(stream);
                 }
             }
             catch
@@ -173,7 +178,7 @@ namespace ZTn.Json.Editor.Forms
                 {
                     if (stream.CanWrite)
                     {
-                        JsonEditorItem.Save(stream);
+                        jTokenTree.SaveJson(stream);
                     }
                 }
             }
@@ -192,26 +197,14 @@ namespace ZTn.Json.Editor.Forms
 
         private void newJsonObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var jsonEditorItem = new JTokenRoot("{}");
-
-            jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
-            jsonTreeView.Nodes
-                .Cast<TreeNode>()
-                .ForEach(n => n.Expand());
+            jTokenTree.SetJsonSource("{}");
 
             saveAsToolStripMenuItem.Enabled = true;
         }
 
         private void newJsonArrayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var jsonEditorItem = new JTokenRoot("[]");
-
-            jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
-            jsonTreeView.Nodes
-                .Cast<TreeNode>()
-                .ForEach(n => n.Expand());
+            jTokenTree.SetJsonSource("[]");
 
             saveAsToolStripMenuItem.Enabled = true;
         }
@@ -221,37 +214,9 @@ namespace ZTn.Json.Editor.Forms
             new AboutBox().ShowDialog();
         }
 
-        /// <summary>
-        /// For the clicked node to be selected.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void jsonTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            jsonTreeView.SelectedNode = e.Node;
-        }
-
-        private void jsonTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
-        {
-            var node = e.Node as IJsonTreeNode;
-            node?.AfterCollapse();
-        }
-
-        private void jsonTreeView_AfterExpand(object sender, TreeViewEventArgs e)
-        {
-            var node = e.Node as IJsonTreeNode;
-            node?.AfterExpand();
-        }
-
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
-            var node = jsonTreeView.SelectedNode as IJsonTreeNode;
-            if (node == null)
-            {
-                return;
-            }
-
-            StartValidationTimer(node);
+            StartValidationTimer();
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -264,67 +229,6 @@ namespace ZTn.Json.Editor.Forms
             jsonValueTextBox.TextChanged += jsonValueTextBox_TextChanged;
         }
 
-        #region >> Methods jsonTreeView_AfterSelect
-
-        /// <summary>
-        /// Main event handler dynamically dispatching the handling to specialized methods.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void jsonTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            JsonTreeView_AfterSelectImplementation((dynamic)e.Node, e);
-        }
-
-        /// <summary>
-        /// Default catcher in case of a node of unattended type.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="e"></param>
-        // ReSharper disable once UnusedParameter.Local
-        private void JsonTreeView_AfterSelectImplementation(TreeNode node, TreeViewEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = "";
-
-            jsonTypeComboBox.Text = $"{JTokenType.Undefined}: {node.GetType().FullName}";
-
-            jsonValueTextBox.ReadOnly = true;
-        }
-
-        // ReSharper disable once UnusedParameter.Local
-        private void JsonTreeView_AfterSelectImplementation(JTokenTreeNode node, TreeViewEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
-
-            jsonTypeComboBox.Text = node.JTokenTag.Type.ToString();
-
-            // If jsonValueTextBox is focused then it triggers this event in the update process, so don't update it again ! (risk: infinite loop between events).
-            if (!jsonValueTextBox.Focused)
-            {
-                jsonValueTextBox.Text = node.JTokenTag.ToString();
-            }
-        }
-
-        // ReSharper disable once UnusedParameter.Local
-        private void JsonTreeView_AfterSelectImplementation(JValueTreeNode node, TreeViewEventArgs e)
-        {
-            newtonsoftJsonTypeTextBox.Text = node.Tag.GetType().Name;
-
-            jsonTypeComboBox.Text = $"{node.JValueTag.Type}";
-
-            switch (node.JValueTag.Type)
-            {
-                case JTokenType.String:
-                    jsonValueTextBox.Text = $@"""{node.JValueTag}""";
-                    break;
-                default:
-                    jsonValueTextBox.Text = $"{node.JValueTag}";
-                    break;
-            }
-        }
-
-        #endregion
-
         private void SetJsonSourceStream(Stream stream, string fileName)
         {
             if (stream == null)
@@ -334,10 +238,9 @@ namespace ZTn.Json.Editor.Forms
 
             OpenedFileName = fileName;
 
-            JTokenRoot jsonEditorItem;
             try
             {
-                jsonEditorItem = new JTokenRoot(stream);
+                jTokenTree.SetJsonSource(stream);
             }
             catch
             {
@@ -351,12 +254,6 @@ namespace ZTn.Json.Editor.Forms
 
             SetActionStatus(@"Document successfully loaded.", false);
             saveAsToolStripMenuItem.Enabled = true;
-
-            jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
-            jsonTreeView.Nodes
-                .Cast<TreeNode>()
-                .ForEach(n => n.Expand());
         }
 
         private void SetActionStatus(string text, bool isError)
@@ -383,7 +280,7 @@ namespace ZTn.Json.Editor.Forms
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
 
-        private void StartValidationTimer(IJsonTreeNode node)
+        private void StartValidationTimer()
         {
             jsonValidationTimer?.Stop();
 
@@ -393,19 +290,17 @@ namespace ZTn.Json.Editor.Forms
             {
                 jsonValidationTimer.Stop();
 
-                jsonTreeView.Invoke(new Action<IJsonTreeNode>(JsonValidationTimerHandler), node);
+                jTokenTree.Invoke(new Action(JsonValidationTimerHandler));
             };
 
             jsonValidationTimer.Start();
         }
 
-        private void JsonValidationTimerHandler(IJsonTreeNode node)
+        private void JsonValidationTimerHandler()
         {
-            jsonTreeView.BeginUpdate();
-
             try
             {
-                jsonTreeView.SelectedNode = node.AfterJsonTextChange(jsonValueTextBox.Text);
+                jTokenTree.UpdateSelected(jsonValueTextBox.Text);
 
                 SetJsonStatus("Json format validated.", false);
             }
@@ -419,8 +314,6 @@ namespace ZTn.Json.Editor.Forms
             {
                 SetJsonStatus("INVALID Json format", true);
             }
-
-            jsonTreeView.EndUpdate();
         }
     }
 }
