@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -10,9 +9,9 @@ namespace ZTn.Json.Editor.Forms
         public AboutBox()
         {
             InitializeComponent();
-            Text = String.Format("À propos de {0}", AssemblyTitle);
+            Text = $"À propos de {AssemblyTitle}";
             labelProductName.Text = AssemblyProduct;
-            labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            labelVersion.Text = $"Version {AssemblyVersion}";
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
             textBoxDescription.Text = AssemblyDescription;
@@ -37,13 +36,7 @@ namespace ZTn.Json.Editor.Forms
             }
         }
 
-        public string AssemblyVersion
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
+        public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         public string AssemblyDescription
         {

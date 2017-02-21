@@ -1,4 +1,6 @@
-﻿namespace ZTn.Json.Editor.Forms
+﻿using ZTn.Json.JsonTreeView.Controls;
+
+namespace ZTn.Json.Editor.Forms
 {
     partial class JsonEditorMainForm
     {
@@ -50,7 +52,7 @@
             this.actionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.jsonStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.jTokenTree = new ZTn.Json.Editor.Forms.JTokenTreeUserControl();
+            this.jTokenTree = new JTokenTreeUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.jsonTreeViewSplitContainer)).BeginInit();
             this.jsonTreeViewSplitContainer.Panel1.SuspendLayout();
             this.jsonTreeViewSplitContainer.Panel2.SuspendLayout();
