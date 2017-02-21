@@ -63,6 +63,7 @@
     <Compile Include="Forms\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AfterSelectEventArgs.cs" />
     <Compile Include="Forms\JArrayContextMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -73,6 +74,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\JsonTreeNodeFactory.cs" />
+    <Compile Include="Forms\JTokenTreeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\JTokenTreeUserControl.Designer.cs">
+      <DependentUpon>JTokenTreeUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\JTokenContextMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,6 +100,7 @@
     </Compile>
     <Compile Include="Forms\KeyStates.cs" />
     <Compile Include="Forms\UnattendedJTokenTypeException.cs" />
+    <Compile Include="Forms\WrongJsonStreamException.cs" />
     <Compile Include="Generic\EditorClipboard.cs" />
     <Compile Include="JTokenRoot.cs" />
     <Compile Include="Forms\JsonEditorMainForm.cs">
@@ -112,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\JsonEditorMainForm.resx">
       <DependentUpon>JsonEditorMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\JTokenTreeUserControl.resx">
+      <DependentUpon>JTokenTreeUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
