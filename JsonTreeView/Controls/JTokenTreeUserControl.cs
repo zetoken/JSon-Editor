@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ using ZTn.Json.JsonTreeView.Linq;
 
 namespace ZTn.Json.JsonTreeView.Controls
 {
+    [DefaultEvent("AfterSelect")]
     public partial class JTokenTreeUserControl : UserControl
     {
         #region >> Constructors
@@ -28,8 +30,9 @@ namespace ZTn.Json.JsonTreeView.Controls
 
         #region >> Events
 
+        [Category("Behavior")]
         [Description("Occurs when the selection has been changed")]
-        public EventHandler<AfterSelectEventArgs> AfterSelect;
+        public event EventHandler<AfterSelectEventArgs> AfterSelect;
 
         #endregion
 

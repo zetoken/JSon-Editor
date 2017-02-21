@@ -98,6 +98,7 @@ namespace ZTn.Json.Editor.Forms
             this.jTokenTree.Name = "jTokenTree";
             this.jTokenTree.Size = new System.Drawing.Size(666, 546);
             this.jTokenTree.TabIndex = 2;
+            this.jTokenTree.AfterSelect += new System.EventHandler<ZTn.Json.JsonTreeView.AfterSelectEventArgs>(this.jTokenTree_AfterSelect);
             // 
             // jsonTypeComboBox
             // 

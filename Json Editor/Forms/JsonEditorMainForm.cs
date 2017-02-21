@@ -55,19 +55,6 @@ namespace ZTn.Json.Editor.Forms
 
             jsonTypeComboBox.DataSource = Enum.GetValues(typeof(JTokenType));
 
-            jTokenTree.AfterSelect += (sender, eventArgs) =>
-            {
-                newtonsoftJsonTypeTextBox.Text = eventArgs.TypeName;
-
-                jsonTypeComboBox.Text = eventArgs.JTokenTypeName;
-
-                // If jsonValueTextBox is focused then it triggers this event in the update process, so don't update it again ! (risk: infinite loop between events).
-                if (!jsonValueTextBox.Focused)
-                {
-                    jsonValueTextBox.Text = eventArgs.GetJsonString();
-                }
-            };
-
             OpenedFileName = null;
             SetActionStatus(@"Empty document.", true);
             SetJsonStatus(@"", false);
@@ -227,6 +214,19 @@ namespace ZTn.Json.Editor.Forms
         private void jsonValueTextBox_Enter(object sender, EventArgs e)
         {
             jsonValueTextBox.TextChanged += jsonValueTextBox_TextChanged;
+        }
+
+        private void jTokenTree_AfterSelect(object sender, JsonTreeView.AfterSelectEventArgs eventArgs)
+        {
+            newtonsoftJsonTypeTextBox.Text = eventArgs.TypeName;
+
+            jsonTypeComboBox.Text = eventArgs.JTokenTypeName;
+
+            // If jsonValueTextBox is focused then it triggers this event in the update process, so don't update it again ! (risk: infinite loop between events).
+            if (!jsonValueTextBox.Focused)
+            {
+                jsonValueTextBox.Text = eventArgs.GetJsonString();
+            }
         }
 
         private void SetJsonSourceStream(Stream stream, string fileName)
