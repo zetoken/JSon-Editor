@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using ZTn.Json.JsonTreeView.Controls;
 using ZTn.Json.JsonTreeView.Generic;
 
 namespace ZTn.Json.JsonTreeView
@@ -44,7 +44,7 @@ namespace ZTn.Json.JsonTreeView
         {
             if (TreeView != null)
             {
-                NodeFont = TreeView.Font;
+                NodeFont = ((JTokenTreeUserControl)TreeView.Parent).CollapsedFont;
             }
         }
 
@@ -56,7 +56,7 @@ namespace ZTn.Json.JsonTreeView
 
             if (TreeView != null)
             {
-                NodeFont = new Font(TreeView.Font, FontStyle.Underline);
+                NodeFont = ((JTokenTreeUserControl)TreeView.Parent).ExpandedFont;
             }
         }
 

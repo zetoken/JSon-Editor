@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,6 +12,8 @@ namespace ZTn.Json.JsonTreeView.Controls
     [DefaultEvent("AfterSelect")]
     public partial class JTokenTreeUserControl : UserControl
     {
+        private Font collapsedFont;
+        private Font expandedFont;
         public const int LoadedTreeDepth = 3;
 
         #region >> Constructors
@@ -41,6 +44,18 @@ namespace ZTn.Json.JsonTreeView.Controls
 
         private JTokenRoot JsonEditorItem =>
             jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
+
+        public Font ExpandedFont
+        {
+            get { return expandedFont ?? (expandedFont = new Font(Font, FontStyle.Underline)); }
+            set { expandedFont = value; }
+        }
+
+        public Font CollapsedFont
+        {
+            get { return collapsedFont ?? (collapsedFont = Font); }
+            set { collapsedFont = value; }
+        }
 
         #endregion
 
@@ -123,13 +138,35 @@ namespace ZTn.Json.JsonTreeView.Controls
         private void OnJsonTreeViewAfterCollapse(object sender, TreeViewEventArgs eventArgs)
         {
             var node = eventArgs.Node as IJsonTreeNode;
-            node?.AfterCollapse();
+
+            jsonTreeView.BeginUpdate();
+
+            try
+            {
+                node?.AfterCollapse();
+            }
+            finally
+            {
+                jsonTreeView.EndUpdate();
+            }
+
+
         }
 
         private void OnJsonTreeViewAfterExpand(object sender, TreeViewEventArgs eventArgs)
         {
             var node = eventArgs.Node as IJsonTreeNode;
-            node?.AfterExpand();
+
+            jsonTreeView.BeginUpdate();
+
+            try
+            {
+                node?.AfterExpand();
+            }
+            finally
+            {
+                jsonTreeView.EndUpdate();
+            }
         }
 
         private void OnJsonTreeViewAfterSelect(object sender, TreeViewEventArgs eventArgs)
