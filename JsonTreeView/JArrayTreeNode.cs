@@ -33,12 +33,16 @@ namespace ZTn.Json.JsonTreeView
         /// <inheritdoc />
         public override void AfterCollapse()
         {
-            Text = $"[{JArrayTag.Type}] {Tag}";
+            base.AfterCollapse();
+
+            Text = $"[{JArrayTag.Type}] {GetAbstractTextForTag()}";
         }
 
         /// <inheritdoc />
         public override void AfterExpand()
         {
+            base.AfterExpand();
+
             Text = $"[{JArrayTag.Type}]";
         }
 

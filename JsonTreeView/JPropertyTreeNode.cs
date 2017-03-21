@@ -39,20 +39,16 @@ namespace ZTn.Json.JsonTreeView
         public override void AfterCollapse()
         {
             base.AfterCollapse();
-            if (TreeView != null)
-            {
-                NodeFont = TreeView.Font;
-            }
+
+            Text = GetAbstractTextForTag();
         }
 
         /// <inheritdoc />
         public override void AfterExpand()
         {
+            base.AfterExpand();
+
             Text = JPropertyTag.Name;
-            if (TreeView != null)
-            {
-                NodeFont = new Font(TreeView.Font, FontStyle.Underline);
-            }
         }
 
         /// <inheritdoc />

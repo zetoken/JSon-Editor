@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,8 @@ namespace ZTn.Json.JsonTreeView
     /// </summary>
     public abstract class JTokenTreeNode : TreeNode, IJsonTreeNode
     {
+        protected const int MaxTagTextLength = 100;
+
         #region >> Properties
 
         public JToken JTokenTag => Tag as JToken;
@@ -28,7 +31,7 @@ namespace ZTn.Json.JsonTreeView
             Tag = jToken;
             ContextMenuStrip = SingleInstanceProvider<JTokenContextMenuStrip>.Value;
 
-            AfterCollapse();
+            Text = GetAbstractTextForTag();
         }
 
         #endregion
@@ -39,14 +42,22 @@ namespace ZTn.Json.JsonTreeView
         /// <remarks>Default simple implementation to be overriden if needed.</remarks>
         public virtual void AfterCollapse()
         {
-            Text = Tag.ToString();
+            if (TreeView != null)
+            {
+                NodeFont = TreeView.Font;
+            }
         }
 
         /// <inheritdoc />
         /// <remarks>Default simple implementation to be overriden if needed.</remarks>
         public virtual void AfterExpand()
         {
-            Text = Tag.ToString();
+            ExpandTreeNodeDepth(this);
+
+            if (TreeView != null)
+            {
+                NodeFont = new Font(TreeView.Font, FontStyle.Underline);
+            }
         }
 
         /// <inheritdoc />
@@ -178,6 +189,38 @@ namespace ZTn.Json.JsonTreeView
             Expand();
 
             return newNode;
+        }
+
+        protected string GetAbstractTextForTag()
+        {
+            var text = JTokenTag.ToString();
+            if (text.Length > MaxTagTextLength)
+            {
+                text = $"{text.Substring(0, MaxTagTextLength)} ...";
+            }
+            return text;
+        }
+
+        /// <summary>
+        /// Adds 1 depth level in given node.
+        /// </summary>
+        /// <param name="node"></param>
+        private static void ExpandTreeNodeDepth(JTokenTreeNode node)
+        {
+            if (node.Nodes.Count > 0)
+            {
+                foreach (JTokenTreeNode childNode in node.Nodes)
+                {
+                    ExpandTreeNodeDepth(childNode);
+                }
+            }
+            else
+            {
+                foreach (var jToken in node.JTokenTag)
+                {
+                    node.Nodes.Add(JsonTreeNodeFactory.Create(jToken, 1));
+                }
+            }
         }
     }
 }

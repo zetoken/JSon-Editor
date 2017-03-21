@@ -28,5 +28,25 @@ namespace ZTn.Json.JsonTreeView
         }
 
         #endregion
+
+        #region >> JTokenTreeNode
+
+        /// <inheritdoc />
+        public override void AfterCollapse()
+        {
+            base.AfterCollapse();
+
+            Text = GetAbstractTextForTag();
+        }
+
+        /// <inheritdoc />
+        public override void AfterExpand()
+        {
+            base.AfterExpand();
+
+            Text = GetAbstractTextForTag();
+        }
+
+        #endregion
     }
 }

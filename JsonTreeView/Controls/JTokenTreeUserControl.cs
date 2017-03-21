@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,6 +11,8 @@ namespace ZTn.Json.JsonTreeView.Controls
     [DefaultEvent("AfterSelect")]
     public partial class JTokenTreeUserControl : UserControl
     {
+        public const int LoadedTreeDepth = 3;
+
         #region >> Constructors
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace ZTn.Json.JsonTreeView.Controls
             }
 
             jsonTreeView.Nodes.Clear();
-            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue));
+            jsonTreeView.Nodes.Add(JsonTreeNodeFactory.Create(jsonEditorItem.JTokenValue, 2));
             jsonTreeView.Nodes
                 .Cast<TreeNode>()
                 .ForEach(n => n.Expand());

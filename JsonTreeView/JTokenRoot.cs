@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ZTn.Json.JsonTreeView
 {
-    sealed class JTokenRoot
+    internal sealed class JTokenRoot
     {
         #region >> Fields
 
