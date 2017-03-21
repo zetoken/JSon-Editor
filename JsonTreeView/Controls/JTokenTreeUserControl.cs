@@ -122,13 +122,13 @@ namespace ZTn.Json.JsonTreeView.Controls
         private void OnJsonTreeViewAfterCollapse(object sender, TreeViewEventArgs eventArgs)
         {
             var node = eventArgs.Node as IJsonTreeNode;
-            node?.AfterExpand();
+            node?.AfterCollapse();
         }
 
         private void OnJsonTreeViewAfterExpand(object sender, TreeViewEventArgs eventArgs)
         {
             var node = eventArgs.Node as IJsonTreeNode;
-            node?.AfterCollapse();
+            node?.AfterExpand();
         }
 
         private void OnJsonTreeViewAfterSelect(object sender, TreeViewEventArgs eventArgs)
