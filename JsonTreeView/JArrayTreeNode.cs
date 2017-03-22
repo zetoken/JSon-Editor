@@ -35,7 +35,7 @@ namespace ZTn.Json.JsonTreeView
         {
             base.AfterCollapse();
 
-            Text = $"[{JArrayTag.Type}] {GetAbstractTextForTag()}";
+            Text = $@"[{JArrayTag.Type}] {GetAbstractTextForTag()}";
         }
 
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace ZTn.Json.JsonTreeView
         {
             base.AfterExpand();
 
-            Text = $"[{JArrayTag.Type}]";
+            Text = $@"[{JArrayTag.Type}]";
         }
 
         #endregion

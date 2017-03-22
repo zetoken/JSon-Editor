@@ -79,6 +79,7 @@
     <Compile Include="Controls\JTokenTreeUserControl.Designer.cs">
       <DependentUpon>JTokenTreeUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Linq\TreeNodeExtension.cs" />
     <Compile Include="Views\JsonTreeView.cs">
       <SubType>Component</SubType>
     </Compile>

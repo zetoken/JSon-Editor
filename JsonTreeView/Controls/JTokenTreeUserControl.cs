@@ -139,34 +139,14 @@ namespace ZTn.Json.JsonTreeView.Controls
         {
             var node = eventArgs.Node as IJsonTreeNode;
 
-            jsonTreeView.BeginUpdate();
-
-            try
-            {
-                node?.AfterCollapse();
-            }
-            finally
-            {
-                jsonTreeView.EndUpdate();
-            }
-
-
+            node?.AfterCollapse();
         }
 
         private void OnJsonTreeViewAfterExpand(object sender, TreeViewEventArgs eventArgs)
         {
             var node = eventArgs.Node as IJsonTreeNode;
 
-            jsonTreeView.BeginUpdate();
-
-            try
-            {
-                node?.AfterExpand();
-            }
-            finally
-            {
-                jsonTreeView.EndUpdate();
-            }
+            node?.AfterExpand();
         }
 
         private void OnJsonTreeViewAfterSelect(object sender, TreeViewEventArgs eventArgs)

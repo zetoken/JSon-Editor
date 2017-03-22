@@ -35,7 +35,7 @@ namespace ZTn.Json.JsonTreeView
         {
             base.AfterCollapse();
 
-            Text = $"{{{JObjectTag.Type}}} {GetAbstractTextForTag()}";
+            Text = $@"{{{JObjectTag.Type}}} {GetAbstractTextForTag()}";
         }
 
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace ZTn.Json.JsonTreeView
         {
             base.AfterExpand();
 
-            Text = $"{{{JObjectTag.Type}}}";
+            Text = $@"{{{JObjectTag.Type}}}";
         }
 
         #endregion

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ZTn.Json.JsonTreeView.Extensions;
 using ZTn.Json.JsonTreeView.Generic;
+using ZTn.Json.JsonTreeView.Linq;
 using ZTn.Json.JsonTreeView.Properties;
 
 namespace ZTn.Json.JsonTreeView
@@ -114,7 +115,11 @@ namespace ZTn.Json.JsonTreeView
             {
                 JTokenNode.TreeView.BeginUpdate();
 
-                JTokenNode.Collapse(false);
+                var nodes = JTokenNode.EnumerateNodes().Take(1000);
+                foreach (var treeNode in nodes)
+                {
+                    treeNode.Collapse();
+                }
 
                 JTokenNode.TreeView.EndUpdate();
             }
@@ -168,7 +173,11 @@ namespace ZTn.Json.JsonTreeView
             {
                 JTokenNode.TreeView.BeginUpdate();
 
-                JTokenNode.ExpandAll();
+                var nodes = JTokenNode.EnumerateNodes().Take(1000);
+                foreach (var treeNode in nodes)
+                {
+                    treeNode.Expand();
+                }
 
                 JTokenNode.TreeView.EndUpdate();
             }
