@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using ZTn.Json.Editor.Forms;
 
 namespace ZTn.Json.Editor
 {
@@ -13,7 +14,7 @@ namespace ZTn.Json.Editor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.JsonEditorMainForm());
+            Application.Run(new MainForm());
         }
     }
 }
