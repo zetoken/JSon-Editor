@@ -75,6 +75,9 @@ namespace ZTn.Json.Editor.Forms
                     OpenedFileName = null;
                 }
             }
+            //auto create empty object
+            newJsonObjectToolStripMenuItem_Click(this, null);
+
         }
 
         #endregion
@@ -301,6 +304,10 @@ namespace ZTn.Json.Editor.Forms
             try
             {
                 jTokenTree.UpdateSelected(jsonValueTextBox.Text);
+                //reformat json to be pretty
+                jsonValueTextBox.Text = JsonConvert.SerializeObject(
+                    JsonConvert.DeserializeObject(jsonValueTextBox.Text), 
+                    Formatting.Indented);
 
                 SetJsonStatus("Json format validated.", false);
             }
@@ -313,6 +320,16 @@ namespace ZTn.Json.Editor.Forms
             catch
             {
                 SetJsonStatus("INVALID Json format", true);
+            }
+        }
+
+        private void jsonValueTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            //remove styles from richtextbox
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                ((RichTextBox)sender).Paste(DataFormats.GetFormat("Text"));
+                e.Handled = true;
             }
         }
     }
