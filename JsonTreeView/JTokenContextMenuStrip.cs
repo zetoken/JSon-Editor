@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using ZTn.Json.JsonTreeView.Extensions;
 using ZTn.Json.JsonTreeView.Generic;
 using ZTn.Json.JsonTreeView.Linq;
-using ZTn.Json.JsonTreeView.Properties;
 
 namespace ZTn.Json.JsonTreeView
 {
@@ -34,17 +33,17 @@ namespace ZTn.Json.JsonTreeView
         /// </summary>
         public JTokenContextMenuStrip()
         {
-            CollapseAllToolStripItem = new ToolStripMenuItem(Resources.CollapseAll, null, CollapseAll_Click);
-            ExpandAllToolStripItem = new ToolStripMenuItem(Resources.ExpandAll, null, ExpandAll_Click);
+            CollapseAllToolStripItem = new ToolStripMenuItem(Resources.Lang.CollapseAll, null, CollapseAll_Click);
+            ExpandAllToolStripItem = new ToolStripMenuItem(Resources.Lang.ExpandAll, null, ExpandAll_Click);
 
-            EditToolStripItem = new ToolStripMenuItem(Resources.Edit);
+            EditToolStripItem = new ToolStripMenuItem(Resources.Lang.Edit);
 
-            CopyNodeToolStripItem = new ToolStripMenuItem(Resources.Copy, null, CopyNode_Click);
-            CutNodeToolStripItem = new ToolStripMenuItem(Resources.Cut, null, CutNode_Click);
-            DeleteNodeToolStripItem = new ToolStripMenuItem(Resources.DeleteNode, null, DeleteNode_Click);
-            PasteNodeAfterToolStripItem = new ToolStripMenuItem(Resources.PasteNodeAfter, null, PasteNodeAfter_Click);
-            PasteNodeBeforeToolStripItem = new ToolStripMenuItem(Resources.PasteNodeBefore, null, PasteNodeBefore_Click);
-            PasteNodeReplaceToolStripItem = new ToolStripMenuItem(Resources.Replace, null, PasteNodeReplace_Click);
+            CopyNodeToolStripItem = new ToolStripMenuItem(Resources.Lang.Copy, null, CopyNode_Click);
+            CutNodeToolStripItem = new ToolStripMenuItem(Resources.Lang.Cut, null, CutNode_Click);
+            DeleteNodeToolStripItem = new ToolStripMenuItem(Resources.Lang.DeleteNode, null, DeleteNode_Click);
+            PasteNodeAfterToolStripItem = new ToolStripMenuItem(Resources.Lang.PasteNodeAfter, null, PasteNodeAfter_Click);
+            PasteNodeBeforeToolStripItem = new ToolStripMenuItem(Resources.Lang.PasteNodeBefore, null, PasteNodeBefore_Click);
+            PasteNodeReplaceToolStripItem = new ToolStripMenuItem(Resources.Lang.Replace, null, PasteNodeReplace_Click);
 
             EditToolStripItem.DropDownItems.Add(CopyNodeToolStripItem);
             EditToolStripItem.DropDownItems.Add(CutNodeToolStripItem);
@@ -158,7 +157,7 @@ namespace ZTn.Json.JsonTreeView
             }
             catch (JTokenTreeNodeDeleteException exception)
             {
-                MessageBox.Show(exception.InnerException?.Message, Resources.DeletionActionFailed);
+                MessageBox.Show(exception.InnerException?.Message, Resources.Lang.DeletionActionFailed);
             }
         }
 
@@ -196,7 +195,7 @@ namespace ZTn.Json.JsonTreeView
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException?.Message, Resources.PasteActionFailed);
+                MessageBox.Show(exception.InnerException?.Message, Resources.Lang.PasteActionFailed);
             }
         }
 
@@ -213,7 +212,7 @@ namespace ZTn.Json.JsonTreeView
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException?.Message, Resources.PasteActionFailed);
+                MessageBox.Show(exception.InnerException?.Message, Resources.Lang.PasteActionFailed);
             }
         }
 
@@ -230,7 +229,7 @@ namespace ZTn.Json.JsonTreeView
             }
             catch (JTokenTreeNodePasteException exception)
             {
-                MessageBox.Show(exception.InnerException?.Message, Resources.PasteActionFailed);
+                MessageBox.Show(exception.InnerException?.Message, Resources.Lang.PasteActionFailed);
             }
         }
 

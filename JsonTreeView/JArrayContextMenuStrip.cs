@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
-using ZTn.Json.JsonTreeView.Properties;
 
 namespace ZTn.Json.JsonTreeView
 {
@@ -16,10 +15,10 @@ namespace ZTn.Json.JsonTreeView
 
         public JArrayContextMenuStrip()
         {
-            ArrayToolStripItem = new ToolStripMenuItem(Resources.JsonArray);
-            InsertArrayToolStripItem = new ToolStripMenuItem(Resources.InsertArray, null, InsertArray_Click);
-            InsertObjectToolStripItem = new ToolStripMenuItem(Resources.InsertObject, null, InsertObject_Click);
-            InsertValueToolStripItem = new ToolStripMenuItem(Resources.InsertValue, null, InsertValue_Click);
+            ArrayToolStripItem = new ToolStripMenuItem(Resources.Lang.JsonArray);
+            InsertArrayToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertArray, null, InsertArray_Click);
+            InsertObjectToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertObject, null, InsertObject_Click);
+            InsertValueToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertValue, null, InsertValue_Click);
 
             ArrayToolStripItem.DropDownItems.Add(InsertArrayToolStripItem);
             ArrayToolStripItem.DropDownItems.Add(InsertObjectToolStripItem);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
-using ZTn.Json.JsonTreeView.Properties;
 
 namespace ZTn.Json.JsonTreeView
 {
@@ -19,10 +18,10 @@ namespace ZTn.Json.JsonTreeView
         /// </summary>
         public JObjectContextMenuStrip()
         {
-            ObjectToolStripItem = new ToolStripMenuItem(Resources.JsonObject);
-            InsertPropertyAsValueToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsValue, null, InsertProperty_Click);
-            InsertPropertyAsArrayToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsArray, null, InsertPropertyAsArray_Click);
-            InsertPropertyAsObjectToolStripItem = new ToolStripMenuItem(Resources.InsertPropertyAsObject, null, InsertPropertyAsObject_Click);
+            ObjectToolStripItem = new ToolStripMenuItem(Resources.Lang.JsonObject);
+            InsertPropertyAsValueToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertPropertyAsValue, null, InsertProperty_Click);
+            InsertPropertyAsArrayToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertPropertyAsArray, null, InsertPropertyAsArray_Click);
+            InsertPropertyAsObjectToolStripItem = new ToolStripMenuItem(Resources.Lang.InsertPropertyAsObject, null, InsertPropertyAsObject_Click);
 
             ObjectToolStripItem.DropDownItems.Add(InsertPropertyAsValueToolStripItem);
             ObjectToolStripItem.DropDownItems.Add(InsertPropertyAsArrayToolStripItem);
