@@ -190,6 +190,7 @@ namespace ZTn.Json.Editor.Forms
             jTokenTree.SetJsonSource("{}");
 
             saveAsToolStripMenuItem.Enabled = true;
+            SetActionStatus(@"Document Loaded", false);
         }
 
         private void newJsonArrayToolStripMenuItem_Click(object sender, EventArgs e)
@@ -206,6 +207,7 @@ namespace ZTn.Json.Editor.Forms
 
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
+            if(!isValidating)
             StartValidationTimer();
         }
 
@@ -282,6 +284,7 @@ namespace ZTn.Json.Editor.Forms
             jsonStatusLabel.Text = text;
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
+        private bool isValidating = false;
 
         private void StartValidationTimer()
         {
@@ -291,9 +294,16 @@ namespace ZTn.Json.Editor.Forms
 
             jsonValidationTimer.Elapsed += (o, args) =>
             {
+                if (isValidating)
+                    return;
+                else
+                    isValidating = true;
+
                 jsonValidationTimer.Stop();
 
                 jTokenTree.Invoke(new Action(JsonValidationTimerHandler));
+                isValidating = false;
+
             };
 
             jsonValidationTimer.Start();
@@ -310,6 +320,7 @@ namespace ZTn.Json.Editor.Forms
                     Formatting.Indented);
 
                 SetJsonStatus("Json format validated.", false);
+               
             }
             catch (JsonReaderException exception)
             {
