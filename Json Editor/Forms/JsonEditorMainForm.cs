@@ -208,7 +208,9 @@ namespace ZTn.Json.Editor.Forms
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
             if(!isValidating)
-            StartValidationTimer();
+            {
+                StartValidationTimer();
+            }
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -284,7 +286,7 @@ namespace ZTn.Json.Editor.Forms
             jsonStatusLabel.Text = text;
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
-        private bool isValidating = false;
+        private bool isValidating;
 
         private void StartValidationTimer()
         {
@@ -295,9 +297,13 @@ namespace ZTn.Json.Editor.Forms
             jsonValidationTimer.Elapsed += (o, args) =>
             {
                 if (isValidating)
-                    return;
+                { 
+                    return; 
+                }
                 else
-                    isValidating = true;
+                { 
+                    isValidating = true; 
+                }
 
                 jsonValidationTimer.Stop();
 
