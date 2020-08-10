@@ -17,6 +17,7 @@
     <AssemblyName>ZTn.Json.Editor</AssemblyName>
     <OutputType>WinExe</OutputType>
     <StartupObject>ZTn.Json.Editor.Program</StartupObject>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\JsonTreeView\JsonTreeView.csproj" />
