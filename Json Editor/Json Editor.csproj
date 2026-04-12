@@ -1,17 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Product>Json Editor by ZTn</Product>
     <Description>Simple Json Editor based on Newtonsoft.Json library</Description>
-    <Copyright>ZeToken.net 2013-2020 (MIT License)</Copyright>
+    <Copyright>ZeToken.net 2013-2026 (MIT License)</Copyright>
     <Authors>Sylvain Vernois</Authors>
-    <Version>1.6.0</Version>
+    <Version>1.7.0</Version>
     <Company>ZeToken.net</Company>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/wsct/WSCT-Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/wsct/WSCT-Core</RepositoryUrl>
     <PackageTags>json, editor</PackageTags>
-    <PackageReleaseNotes>- new: support .net 4.5.2 and .net core 3.1</PackageReleaseNotes>
+    <PackageReleaseNotes>- new: support .net 10.0 windows</PackageReleaseNotes>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>ZTn.Json.Editor</RootNamespace>
     <AssemblyName>ZTn.Json.Editor</AssemblyName>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Json Editor/Json Editor.csproj" />
+  <Project Path="JsonTreeView/JsonTreeView.csproj" />
+</Solution>

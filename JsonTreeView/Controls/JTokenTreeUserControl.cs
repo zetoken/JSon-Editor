@@ -45,12 +45,14 @@ namespace ZTn.Json.JsonTreeView.Controls
         private JTokenRoot JsonEditorItem =>
             jsonTreeView.Nodes.Count != 0 ? new JTokenRoot(((JTokenTreeNode)jsonTreeView.Nodes[0]).JTokenTag) : null;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Font ExpandedFont
         {
             get { return expandedFont ?? (expandedFont = new Font(Font, FontStyle.Underline)); }
             set { expandedFont = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Font CollapsedFont
         {
             get { return collapsedFont ?? (collapsedFont = Font); }
