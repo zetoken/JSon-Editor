@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <Company>ZeToken.net</Company>
+    <Product>Json Editor by ZTn</Product>
+    <Authors>Sylvain Vernois</Authors>
+    <Copyright>ZeToken.net 2013-2026 (MIT License)</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageProjectUrl>https://github.com/zetoken/JSon-Editor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zetoken/JSon-Editor</RepositoryUrl>
+    <PackageTags>json, editor</PackageTags>
+    <PackageReleaseNotes>- new: support .net 10.0 windows</PackageReleaseNotes>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <PackageOutputPath>../nuget/$(Configuration)</PackageOutputPath>
+  </PropertyGroup>
+</Project>
